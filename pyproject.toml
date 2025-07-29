@@ -23,43 +23,43 @@ dependencies = [
     # Web框架
     "fastapi>=0.104.0",
     "uvicorn[standard]>=0.24.0",
-    
+
     # 数据处理
     "pydantic>=2.5.0",
     "pydantic-settings>=2.0.0",
-    
+
     # HTTP客户端
     "httpx>=0.25.0",
     "requests>=2.31.0",
-    
+
     # 测试框架
     "pytest>=7.4.0",
     "pytest-asyncio>=0.21.0",
-    
+
     # 模板引擎
     "jinja2>=3.1.0",
-    
+
     # 配置文件
     "pyyaml>=6.0",
     "python-dotenv>=1.0.0",
-    
+
     # 命令行工具
     "click>=8.1.0",
     "typer>=0.9.0",
-    
+
     # AI/LLM集成
     "openai>=1.3.0",
     "langchain>=0.0.350",
     "langchain-openai>=0.0.2",
     "tiktoken>=0.5.0",
-    
+
     # 日志系统
     "loguru>=0.7.0",
-    
+
     # 实用工具
     "rich>=13.7.0",
     "watchdog>=3.0.0",
-    
+
     # 数据库
     "sqlalchemy>=2.0.0",
     "alembic>=1.12.0",
@@ -112,6 +112,8 @@ Documentation = "https://spec2test.readthedocs.io"
 
 [project.scripts]
 spec2test = "app.main:cli"
+quality-check = "scripts.quality-check:main"
+format-code = "scripts.format-code:main"
 
 [build-system]
 requires = ["hatchling"]
@@ -123,7 +125,7 @@ packages = ["app"]
 # Black代码格式化配置
 [tool.black]
 line-length = 88
-target-version = ['py39']
+target-version = ['py312']
 include = '\.pyi?$'
 extend-exclude = '''
 (
@@ -138,9 +140,9 @@ extend-exclude = '''
     | buck-out
     | build
     | dist
+    | migrations
   )/
-)
-'''
+)'''
 
 # isort导入排序配置
 [tool.isort]
@@ -151,6 +153,7 @@ include_trailing_comma = true
 force_grid_wrap = 0
 use_parentheses = true
 ensure_newline_before_comments = true
+skip_glob = ["migrations/*"]
 
 # MyPy类型检查配置
 [tool.mypy]
@@ -203,24 +206,19 @@ markers = [
 [tool.coverage.run]
 source = ["app"]
 omit = [
-    "*/tests/*",
-    "*/test_*.py",
-    "*/__pycache__/*",
     "*/migrations/*",
+    "*/venv/*",
+    "*/tests/*",
+    "*/conftest.py",
 ]
 
 [tool.coverage.report]
 exclude_lines = [
     "pragma: no cover",
     "def __repr__",
-    "if self.debug:",
-    "if settings.DEBUG",
     "raise AssertionError",
     "raise NotImplementedError",
-    "if 0:",
     "if __name__ == .__main__.:",
-    "class .*\\bProtocol\\):",
-    "@(abc\\.)?abstractmethod",
 ]
 
 [tool.coverage.html]

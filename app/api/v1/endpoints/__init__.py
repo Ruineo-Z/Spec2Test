@@ -5,7 +5,7 @@
 
 __all__ = [
     "parser",
-    "generator", 
+    "generator",
     "executor",
     "reporter",
 ]

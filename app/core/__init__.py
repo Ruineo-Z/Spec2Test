@@ -3,20 +3,20 @@
 提供自动化测试流水线的核心功能和数据模型。
 """
 
-from .models import (
-    # 枚举类型
-    TestCaseType,
-    HttpMethod,
-    TestStatus,
-    DocumentQuality,
-    
-    # 数据模型
+from .models import (  # 枚举类型; 数据模型
     APIEndpoint,
-    TestCase,
-    TestResult,
     DocumentAnalysis,
-    TestSuite,
+    DocumentQuality,
+    HttpMethod,
+    RiskCategory,
+    RiskItem,
+    RiskLevel,
+    TestCase,
+    TestCaseType,
     TestReport,
+    TestResult,
+    TestStatus,
+    TestSuite,
 )
 
 __all__ = [
@@ -25,12 +25,14 @@ __all__ = [
     "HttpMethod",
     "TestStatus",
     "DocumentQuality",
-    
+    "RiskLevel",
+    "RiskCategory",
     # 数据模型
     "APIEndpoint",
     "TestCase",
     "TestResult",
     "DocumentAnalysis",
+    "RiskItem",
     "TestSuite",
     "TestReport",
 ]

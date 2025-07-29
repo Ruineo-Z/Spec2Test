@@ -7,10 +7,148 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+PYTHONPATH
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+.pybuilder/
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# poetry
+poetry.lock
+
+# pdm
+.pdm.toml
+
+# PEP 582
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
+# Cython debug symbols
+cython_debug/
+
+# PyCharm
+.idea/
+
+# Node.js (if any)
 node_modules
 dist
 dist-ssr
 *.local
+package-lock.json
 
 # Editor directories and files
 .vscode/*
@@ -24,7 +162,124 @@ dist-ssr
 *.sw?
 .trae
 .vercel
-package-lock.json
-__pycache__
-.pytest_cache
-.coverage
+
+# Project specific
+spec2test.db
+spec2test.db-journal
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# Temporary files and directories
+temp/
+tmp/
+test_output/
+workspace/
+reports/
+*.tmp
+*.temp
+
+# Code quality and linting reports
+.flake8-report/
+.bandit-report/
+.mypy-report/
+.pylint-report/
+.coverage-report/
+flake8-report.txt
+bandit-report.json
+mypy-report.txt
+pylint-report.txt
+coverage-report.html
+
+# Pre-commit
+.pre-commit-cache/
+
+# Testing and validation outputs
+test-results/
+validation-results/
+*.test.log
+*.validation.log
+
+# Development scripts output
+scripts/logs/
+scripts/output/
+scripts/*.log
+
+# AI and ML models (if any large files)
+*.pkl
+*.pickle
+*.joblib
+*.h5
+*.hdf5
+*.onnx
+*.pb
+
+# UV package manager
+uv.lock
+
+# PromptX (if not needed in repo)
+.promptx/
+
+# Docker
+.dockerignore
+
+# Alembic (keep alembic/ but ignore some generated files)
+alembic/versions/*.pyc
+
+# FastAPI/Uvicorn
+.uvicorn.pid
+
+# Secrets and config
+.env.local
+.env.production
+.env.staging
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+config.local.py
+secrets.py
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Backup files
+*.bak
+*.backup
+*.orig
+*.swp
+*.swo
+*~
+
+# Lock files
+*.lock
+.lock
+
+# Runtime files
+*.pid
+*.sock
+
+# Local development overrides
+local_config.py
+dev_config.py
+test_config.py
+.env.dev
+.env.test
+.env.override
+
+# Documentation build outputs
+docs/build/
+docs/_build/
+docs/site/
+
+# Alembic migration backups
+alembic/versions/*.backup
+alembic/versions/*.bak

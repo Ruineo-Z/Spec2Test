@@ -4,7 +4,8 @@
 """
 
 from fastapi import APIRouter
-from app.api.v1.endpoints import parser, generator, executor, reporter
+
+from app.api.v1.endpoints import executor, generator, parser, reporter
 
 # 创建API路由器
 api_router = APIRouter()
@@ -39,7 +40,7 @@ api_router.include_router(
 @api_router.get("/info", tags=["API Info"])
 async def api_info():
     """获取API信息
-    
+
     Returns:
         API版本和功能信息
     """

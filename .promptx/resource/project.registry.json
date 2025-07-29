@@ -4,14 +4,63 @@
   "metadata": {
     "version": "2.0.0",
     "description": "project 级资源注册表",
-    "createdAt": "2025-07-28T13:28:08.218Z",
-    "updatedAt": "2025-07-28T13:28:08.219Z",
-    "resourceCount": 0
+    "createdAt": "2025-07-29T01:46:21.668Z",
+    "updatedAt": "2025-07-29T01:46:21.671Z",
+    "resourceCount": 3
   },
-  "resources": [],
+  "resources": [
+    {
+      "id": "tdd-workflow",
+      "source": "project",
+      "protocol": "execution",
+      "name": "Tdd Workflow 执行模式",
+      "description": "执行模式，定义具体的行为模式",
+      "reference": "@project://.promptx/resource/role/structured-programmer/execution/tdd-workflow.execution.md",
+      "metadata": {
+        "createdAt": "2025-07-29T01:46:21.669Z",
+        "updatedAt": "2025-07-29T01:46:21.669Z",
+        "scannedAt": "2025-07-29T01:46:21.669Z",
+        "path": "role/structured-programmer/execution/tdd-workflow.execution.md"
+      }
+    },
+    {
+      "id": "structured-programmer",
+      "source": "project",
+      "protocol": "role",
+      "name": "Structured Programmer 角色",
+      "description": "专业角色，提供特定领域的专业能力",
+      "reference": "@project://.promptx/resource/role/structured-programmer/structured-programmer.role.md",
+      "metadata": {
+        "createdAt": "2025-07-29T01:46:21.670Z",
+        "updatedAt": "2025-07-29T01:46:21.670Z",
+        "scannedAt": "2025-07-29T01:46:21.670Z",
+        "path": "role/structured-programmer/structured-programmer.role.md"
+      }
+    },
+    {
+      "id": "structured-development",
+      "source": "project",
+      "protocol": "thought",
+      "name": "Structured Development 思维模式",
+      "description": "思维模式，指导AI的思考方式",
+      "reference": "@project://.promptx/resource/role/structured-programmer/thought/structured-development.thought.md",
+      "metadata": {
+        "createdAt": "2025-07-29T01:46:21.671Z",
+        "updatedAt": "2025-07-29T01:46:21.671Z",
+        "scannedAt": "2025-07-29T01:46:21.671Z",
+        "path": "role/structured-programmer/thought/structured-development.thought.md"
+      }
+    }
+  ],
   "stats": {
-    "totalResources": 0,
-    "byProtocol": {},
-    "bySource": {}
+    "totalResources": 3,
+    "byProtocol": {
+      "execution": 1,
+      "role": 1,
+      "thought": 1
+    },
+    "bySource": {
+      "project": 3
+    }
   }
 }

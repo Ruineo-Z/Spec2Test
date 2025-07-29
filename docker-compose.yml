@@ -1,0 +1,100 @@
+# Spec2Test Docker Compose配置
+# 用于本地开发环境
+
+version: '3.8'
+
+services:
+  # 主应用服务
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: spec2test-app
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/spec2test
+      - REDIS_URL=redis://redis:6379/0
+      - ENVIRONMENT=development
+      - LOG_LEVEL=DEBUG
+    volumes:
+      - .:/app
+      - /app/__pycache__
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - spec2test-network
+    restart: unless-stopped
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # PostgreSQL数据库
+  postgres:
+    image: postgres:15-alpine
+    container_name: spec2test-postgres
+    environment:
+      - POSTGRES_DB=spec2test
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5433:5432"  # 使用5433避免与现有数据库冲突
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    networks:
+      - spec2test-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis缓存
+  redis:
+    image: redis:7-alpine
+    container_name: spec2test-redis
+    ports:
+      - "6380:6379"  # 使用6380避免与现有Redis冲突
+    volumes:
+      - redis_data:/data
+    networks:
+      - spec2test-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # 测试运行器（可选）
+  test-runner:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: spec2test-tests
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/spec2test_test
+      - REDIS_URL=redis://redis:6379/1
+      - ENVIRONMENT=testing
+    volumes:
+      - .:/app
+      - /app/__pycache__
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - spec2test-network
+    profiles:
+      - testing
+    command: pytest tests/ -v --cov=app --cov-report=html:reports/coverage
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  spec2test-network:
+    driver: bridge

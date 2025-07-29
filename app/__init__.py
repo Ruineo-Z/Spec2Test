@@ -11,11 +11,11 @@ __description__ = "AI-driven automated testing pipeline from API specs to test r
 # 导出核心组件
 from app.core.models import (
     APIEndpoint,
+    DocumentAnalysis,
     TestCase,
+    TestReport,
     TestResult,
     TestSuite,
-    TestReport,
-    DocumentAnalysis,
 )
 
 __all__ = [

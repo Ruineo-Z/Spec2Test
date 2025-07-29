@@ -1,0 +1,62 @@
+[bandit]
+# Bandit安全检查配置
+
+# 排除的路径
+exclude_dirs =
+    tests,
+    .venv,
+    venv,
+    env,
+    ENV,
+    .env,
+    build,
+    dist,
+    *.egg-info,
+    .git,
+    __pycache__,
+    .pytest_cache,
+    .mypy_cache,
+    alembic/versions,
+    temp,
+    workspace,
+    reports
+
+# 跳过的测试
+skips =
+    B101,  # assert_used - 在测试中使用assert是正常的
+    B601,  # paramiko_calls - 如果使用paramiko
+    B602,  # subprocess_popen_with_shell_equals_true
+    B603,  # subprocess_without_shell_equals_true
+    B607,  # start_process_with_partial_path
+
+# 测试级别
+level = MEDIUM
+
+# 置信度级别
+confidence = MEDIUM
+
+# 输出格式
+format = json
+
+# 报告文件
+output = reports/bandit-report.json
+
+# 详细输出
+verbose = True
+
+# 递归扫描
+recursive = True
+
+# 聚合输出
+aggregate = file
+
+# 包含的测试
+tests =
+    B101,B102,B103,B104,B105,B106,B107,B108,B110,
+    B112,B201,B301,B302,B303,B304,B305,B306,B307,
+    B308,B309,B310,B311,B312,B313,B314,B315,B316,
+    B317,B318,B319,B320,B321,B322,B323,B324,B325,
+    B401,B402,B403,B404,B405,B406,B407,B408,B409,
+    B410,B411,B412,B413,B501,B502,B503,B504,B505,
+    B506,B507,B601,B602,B603,B604,B605,B606,B607,
+    B608,B609,B610,B611,B701,B702,B703
