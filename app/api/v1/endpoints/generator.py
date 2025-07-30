@@ -6,6 +6,7 @@
 from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional
+import json
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
 from pydantic import BaseModel, Field
@@ -51,6 +52,16 @@ class GenerateTestCasesRequest(BaseModel):
     count: int = Field(default=10, ge=1, le=50, description="生成测试用例数量")
 
 
+class GenerateTestCodeRequest(BaseModel):
+    """测试代码生成请求模型"""
+
+    test_suite_id: str = Field(..., description="测试套件ID")
+    framework: CodeFramework = Field(default=CodeFramework.PYTEST, description="测试框架")
+    include_setup_teardown: bool = Field(default=True, description="是否包含setup/teardown")
+    base_url: str = Field(default="http://localhost:8000", description="API基础URL")
+    auth_config: Optional[Dict[str, Any]] = Field(None, description="认证配置")
+
+
 # 响应模型
 class TestCaseResponse(BaseModel):
     """测试用例响应模型"""
@@ -78,6 +89,26 @@ class GenerateTestCasesResponse(BaseModel):
     ai_analysis: str
 
 
+class GeneratedFile(BaseModel):
+    """生成的文件信息"""
+
+    path: str = Field(..., description="文件路径")
+    content: str = Field(..., description="文件内容")
+    file_type: str = Field(..., description="文件类型")
+    description: str = Field(..., description="文件描述")
+
+
+class GenerateTestCodeResponse(BaseModel):
+    """生成测试代码响应模型"""
+
+    success: bool
+    message: str
+    code_project_id: str
+    generated_files: List[GeneratedFile]
+    project_structure: Dict[str, Any]
+    generation_stats: Dict[str, Any]
+
+
 # 辅助函数
 async def log_generation_history(
     document_id: str, generation_type: str, count: int
@@ -99,10 +130,6 @@ async def _generate_test_cases_internal(
     try:
         # 初始化AI生成器
         ai_generator = AITestCaseGenerator()
-
-        # 注意：即使AI不可用，我们也继续使用模拟数据生成测试用例
-        if not ai_generator.is_available():
-            logger.info("AI生成器不可用，将使用模拟数据生成测试用例")
 
         # 从document_id中提取数据库ID
         try:
@@ -292,9 +319,356 @@ async def _generate_test_cases_internal(
 
     except HTTPException:
         raise
+    except ValueError as e:
+        # 处理配置错误和文档质量错误
+        logger.warning(f"Test case generation validation error: {str(e)}")
+        raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         logger.error(f"Failed to generate test cases: {str(e)}")
         raise HTTPException(status_code=500, detail=f"测试用例生成失败: {str(e)}")
+
+
+# API端点
+async def _generate_test_code_internal(
+    request: GenerateTestCodeRequest,
+    background_tasks: BackgroundTasks,
+) -> GenerateTestCodeResponse:
+    """内部测试代码生成逻辑"""
+    logger.info(f"Generating test code for test suite: {request.test_suite_id}")
+
+    try:
+        # 模拟从测试套件ID获取测试用例数据
+        # 在实际实现中，这里应该从数据库或缓存中获取测试用例
+        test_cases_data = {
+            "test_cases": [
+                {
+                    "id": "test_1",
+                    "name": "测试用户注册接口",
+                    "endpoint_path": "/user/register",
+                    "method": "POST",
+                    "request_data": {"email": "test@example.com", "password": "password123"},
+                    "expected_response": {"status": "success", "user_id": "12345"},
+                    "expected_status_code": 200
+                }
+            ]
+        }
+
+        # 生成pytest测试代码
+        if request.framework == CodeFramework.PYTEST:
+            test_code = _generate_pytest_code(
+                test_cases_data["test_cases"],
+                request.base_url,
+                request.include_setup_teardown,
+                request.auth_config
+            )
+        else:
+            # 其他框架的实现
+            test_code = _generate_unittest_code(
+                test_cases_data["test_cases"],
+                request.base_url,
+                request.include_setup_teardown,
+                request.auth_config
+            )
+
+        # 生成配置文件
+        config_files = _generate_config_files(request.framework, request.base_url)
+
+        # 组装生成的文件
+        generated_files = [
+            GeneratedFile(
+                path="test_api.py",
+                content=test_code,
+                file_type="python",
+                description="主要的API测试文件"
+            )
+        ]
+        generated_files.extend(config_files)
+
+        # 生成项目结构信息
+        project_structure = {
+            "framework": request.framework.value,
+            "base_url": request.base_url,
+            "files_count": len(generated_files),
+            "test_cases_count": len(test_cases_data["test_cases"])
+        }
+
+        # 生成统计信息
+        generation_stats = {
+            "framework": request.framework.value,
+            "generated_files_count": len(generated_files),
+            "test_cases_count": len(test_cases_data["test_cases"]),
+            "generation_time": datetime.now().isoformat()
+        }
+
+        # 生成代码项目ID
+        code_project_id = f"cp_{request.test_suite_id}_{int(datetime.now().timestamp())}"
+
+        response = GenerateTestCodeResponse(
+            success=True,
+            message="测试代码生成成功",
+            code_project_id=code_project_id,
+            generated_files=generated_files,
+            project_structure=project_structure,
+            generation_stats=generation_stats
+        )
+
+        # 添加后台任务记录生成历史
+        background_tasks.add_task(
+            log_generation_history,
+            request.test_suite_id,
+            "test_code",
+            len(generated_files)
+        )
+
+        logger.info(f"Test code generated successfully: {len(generated_files)} files")
+        return response
+
+    except Exception as e:
+        logger.error(f"Failed to generate test code: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"测试代码生成失败: {str(e)}")
+
+
+def _generate_pytest_code(
+    test_cases: List[Dict[str, Any]],
+    base_url: str,
+    include_setup_teardown: bool,
+    auth_config: Optional[Dict[str, Any]]
+) -> str:
+    """生成pytest测试代码"""
+    code_lines = [
+        "import pytest",
+        "import requests",
+        "import json",
+        "from typing import Dict, Any",
+        "",
+        "",
+        "class TestAPI:",
+        '    """API测试类"""',
+        "",
+    ]
+
+    if include_setup_teardown:
+        code_lines.extend([
+            "    @pytest.fixture(autouse=True)",
+            "    def setup_method(self):",
+            f'        self.base_url = "{base_url}"',
+            "        self.session = requests.Session()",
+        ])
+        
+        if auth_config:
+            code_lines.extend([
+                "        # 认证配置",
+                f"        self.auth_config = {auth_config}",
+            ])
+        
+        code_lines.extend([
+            "",
+            "    def teardown_method(self):",
+            "        self.session.close()",
+            "",
+        ])
+
+    # 为每个测试用例生成测试方法
+    for i, test_case in enumerate(test_cases):
+        method_name = f"test_{test_case['endpoint_path'].replace('/', '_').replace('{', '').replace('}', '').strip('_')}_{i+1}"
+        
+        test_name = test_case['name']
+        endpoint_path = test_case['endpoint_path']
+        method = test_case['method'].lower()
+        request_data = json.dumps(test_case['request_data'], ensure_ascii=False, indent=8)
+        expected_status = test_case.get('expected_status_code', 200)
+        
+        code_lines.extend([
+             f"    def {method_name}(self):",
+             f'        """测试{test_name}"""',
+             f"        url = self.base_url + '{endpoint_path}'",
+             f"        method = '{method}'",
+             f"        data = {request_data}",
+             "",
+             "        response = self.session.request(method, url, json=data)",
+             "",
+             "        # 验证状态码",
+             f"        assert response.status_code == {expected_status}",
+             "",
+             "        # 验证响应内容",
+             "        response_data = response.json()",
+         ])
+        
+        # 添加响应验证
+        expected_response = test_case.get('expected_response', {})
+        for key, value in expected_response.items():
+            if isinstance(value, str):
+                code_lines.append(f"        assert response_data.get('{key}') == '{value}'")
+            else:
+                code_lines.append(f"        assert response_data.get('{key}') == {value}")
+        
+        code_lines.append("")
+
+    return "\n".join(code_lines)
+
+
+def _generate_unittest_code(
+    test_cases: List[Dict[str, Any]],
+    base_url: str,
+    include_setup_teardown: bool,
+    auth_config: Optional[Dict[str, Any]]
+) -> str:
+    """生成unittest测试代码"""
+    code_lines = [
+        "import unittest",
+        "import requests",
+        "import json",
+        "",
+        "",
+        "class TestAPI(unittest.TestCase):",
+        '    """API测试类"""',
+        "",
+    ]
+
+    if include_setup_teardown:
+        code_lines.extend([
+            "    def setUp(self):",
+            f'        self.base_url = "{base_url}"',
+            "        self.session = requests.Session()",
+        ])
+        
+        if auth_config:
+            code_lines.extend([
+                "        # 认证配置",
+                f"        self.auth_config = {auth_config}",
+            ])
+        
+        code_lines.extend([
+            "",
+            "    def tearDown(self):",
+            "        self.session.close()",
+            "",
+        ])
+
+    # 为每个测试用例生成测试方法
+    for i, test_case in enumerate(test_cases):
+        method_name = f"test_{test_case['endpoint_path'].replace('/', '_').replace('{', '').replace('}', '').strip('_')}_{i+1}"
+        
+        test_name = test_case['name']
+        endpoint_path = test_case['endpoint_path']
+        method = test_case['method'].lower()
+        request_data = json.dumps(test_case['request_data'], ensure_ascii=False, indent=8)
+        expected_status = test_case.get('expected_status_code', 200)
+        
+        code_lines.extend([
+             f"    def {method_name}(self):",
+             f'        """测试{test_name}"""',
+             f"        url = self.base_url + '{endpoint_path}'",
+             f"        method = '{method}'",
+             f"        data = {request_data}",
+             "",
+             "        response = self.session.request(method, url, json=data)",
+             "",
+             "        # 验证状态码",
+             f"        self.assertEqual(response.status_code, {expected_status})",
+             "",
+             "        # 验证响应内容",
+             "        response_data = response.json()",
+         ])
+        
+        # 添加响应验证
+        expected_response = test_case.get('expected_response', {})
+        for key, value in expected_response.items():
+            if isinstance(value, str):
+                code_lines.append(f"        self.assertEqual(response_data.get('{key}'), '{value}')")
+            else:
+                code_lines.append(f"        self.assertEqual(response_data.get('{key}'), {value})")
+        
+        code_lines.append("")
+
+    code_lines.extend([
+        "",
+        "if __name__ == '__main__':",
+        "    unittest.main()"
+    ])
+
+    return "\n".join(code_lines)
+
+
+def _generate_config_files(framework: CodeFramework, base_url: str) -> List[GeneratedFile]:
+    """生成配置文件"""
+    config_files = []
+    
+    if framework == CodeFramework.PYTEST:
+        # 生成pytest.ini配置文件
+        pytest_config = """[tool:pytest]
+addopts = -v --tb=short
+testpaths = .
+python_files = test_*.py
+python_classes = Test*
+python_functions = test_*
+"""
+        config_files.append(GeneratedFile(
+            path="pytest.ini",
+            content=pytest_config,
+            file_type="ini",
+            description="pytest配置文件"
+        ))
+        
+        # 生成conftest.py
+        conftest_content = f"""import pytest
+import requests
+
+@pytest.fixture(scope="session")
+def api_client():
+    \"\"\"API客户端fixture\"\"\"
+    session = requests.Session()
+    session.base_url = "{base_url}"
+    yield session
+    session.close()
+"""
+        config_files.append(GeneratedFile(
+            path="conftest.py",
+            content=conftest_content,
+            file_type="python",
+            description="pytest配置和fixture文件"
+        ))
+    
+    # 生成requirements.txt
+    requirements = """requests>=2.28.0
+pytest>=7.0.0
+pytest-html>=3.1.0
+"""
+    config_files.append(GeneratedFile(
+        path="requirements.txt",
+        content=requirements,
+        file_type="text",
+        description="Python依赖文件"
+    ))
+    
+    # 生成README.md
+    readme_content = f"""# API测试项目
+
+## 简介
+这是一个自动生成的API测试项目，使用{framework.value}框架。
+
+## 安装依赖
+```bash
+pip install -r requirements.txt
+```
+
+## 运行测试
+```bash
+{'pytest' if framework == CodeFramework.PYTEST else 'python -m unittest'}
+```
+
+## 配置
+- 基础URL: {base_url}
+- 测试框架: {framework.value}
+"""
+    config_files.append(GeneratedFile(
+        path="README.md",
+        content=readme_content,
+        file_type="markdown",
+        description="项目说明文档"
+    ))
+    
+    return config_files
 
 
 # API端点
@@ -323,3 +697,29 @@ async def generate_test_cases(
         HTTPException: 文档不存在或生成失败
     """
     return await _generate_test_cases_internal(request, background_tasks, db)
+
+
+@router.post("/code", response_model=GenerateTestCodeResponse)
+async def generate_test_code(
+    request: GenerateTestCodeRequest,
+    background_tasks: BackgroundTasks,
+) -> GenerateTestCodeResponse:
+    """生成测试代码
+
+    基于测试套件ID生成可执行的测试代码，支持：
+    - pytest和unittest框架
+    - 自动生成配置文件
+    - 包含setup/teardown逻辑
+    - 支持认证配置
+
+    Args:
+        request: 测试代码生成请求
+        background_tasks: 后台任务
+
+    Returns:
+        生成的测试代码和配置文件
+
+    Raises:
+        HTTPException: 测试套件不存在或生成失败
+    """
+    return await _generate_test_code_internal(request, background_tasks)

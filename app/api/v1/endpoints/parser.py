@@ -135,7 +135,7 @@ async def upload_and_parse_document(
             # 创建新的文档记录
             document = DocumentModel(
                 name=file.filename or "unknown",
-                file_path=None,  # 不保存到文件系统，直接存储在数据库
+                file_path=f"memory://{file.filename or 'unknown'}",  # 虚拟路径，表示存储在内存/数据库中
                 file_hash=file_hash,
                 file_size=len(content),
                 mime_type=file.content_type,

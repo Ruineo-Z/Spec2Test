@@ -427,36 +427,53 @@ API端点信息：
             prompt[:200] + "..." if len(prompt) > 200 else prompt
         )
 
-        # 尝试调用LLM，如果不可用则使用模拟数据
-        try:
-            if self.is_available():
-                response = await self._call_llm(prompt)
-                generation_details["llm_response_length"] = len(response)
-
-                # 解析响应
-                test_cases, parsing_errors = self._parse_llm_response(
-                    response, endpoint, test_type
-                )
-                generation_details["parsing_errors"] = parsing_errors
+        # 检查LLM是否可用
+        if not self.is_available():
+            provider = settings.llm.provider
+            if provider == "gemini":
+                if not settings.llm.gemini_api_key:
+                    raise ValueError("缺少Gemini API Key，请在.env文件中配置GEMINI_API_KEY")
+                elif not GEMINI_AVAILABLE:
+                    raise ValueError("Gemini库未安装，请运行: pip install google-generativeai")
+                else:
+                    raise ValueError("Gemini客户端初始化失败，请检查API Key是否正确")
+            elif provider == "openai":
+                if not settings.llm.openai_api_key:
+                    raise ValueError("缺少OpenAI API Key，请在.env文件中配置OPENAI_API_KEY")
+                elif not OPENAI_AVAILABLE:
+                    raise ValueError("OpenAI库未安装，请运行: pip install openai")
+                else:
+                    raise ValueError("OpenAI客户端初始化失败，请检查API Key是否正确")
             else:
-                # AI生成器不可用时，生成模拟测试用例
-                logger.info(
-                    f"AI generator not available, using mock data for {test_type.value} test cases"
-                )
-                test_cases = self._generate_mock_test_cases(
-                    endpoint, test_type, max_cases
-                )
-                generation_details["llm_response_length"] = 0
-                generation_details["parsing_errors"] = []
-                generation_details["mock_data_used"] = True
+                raise ValueError(f"不支持的LLM提供商: {provider}，请配置正确的LLM服务")
 
+        # 调用LLM生成测试用例
+        try:
+            response = await self._call_llm(prompt)
+            generation_details["llm_response_length"] = len(response)
+
+            # 解析响应
+            test_cases, parsing_errors = self._parse_llm_response(
+                response, endpoint, test_type
+            )
+            generation_details["parsing_errors"] = parsing_errors
+            
+            # 检查生成质量，如果解析错误太多或测试用例为空，说明接口文档不够清晰
+            if len(parsing_errors) > 0 or len(test_cases) == 0:
+                error_msg = "接口文档信息不够清晰，LLM无法准确生成测试用例。请提供更详细和准确的接口文档，包括：\n"
+                error_msg += "1. 完整的请求参数定义和类型\n"
+                error_msg += "2. 详细的响应结构说明\n"
+                error_msg += "3. 必要的示例数据\n"
+                if parsing_errors:
+                    error_msg += f"\n解析错误详情: {'; '.join(parsing_errors)}"
+                raise ValueError(error_msg)
+
+        except ValueError as e:
+            # 重新抛出配置错误和文档质量错误
+            raise e
         except Exception as e:
-            logger.error(f"Failed to generate test cases via AI: {e}")
-            logger.info(f"Falling back to mock data for {test_type.value} test cases")
-            test_cases = self._generate_mock_test_cases(endpoint, test_type, max_cases)
-            generation_details["llm_response_length"] = 0
-            generation_details["parsing_errors"] = [f"AI generation failed: {str(e)}"]
-            generation_details["mock_data_used"] = True
+            logger.error(f"LLM调用失败: {e}")
+            raise ValueError(f"LLM服务调用失败，请检查网络连接和API配置: {str(e)}")
 
         generation_details["actual_count"] = len(test_cases)
 
@@ -484,16 +501,24 @@ API端点信息：
             full_prompt = f"""你是一个专业的API测试工程师，擅长生成高质量的测试用例。
 
 {prompt}"""
+            
+            logger.info(f"Calling Gemini API with prompt length: {len(full_prompt)}")
+            logger.debug(f"Prompt preview: {full_prompt[:200]}...")
 
-            # 调用Gemini API
-            response = await asyncio.to_thread(
-                self.gemini_model.generate_content,
-                full_prompt,
-                generation_config=genai.types.GenerationConfig(
-                    temperature=settings.llm.temperature,
-                    max_output_tokens=settings.llm.max_tokens,
+            # 调用Gemini API（带超时）
+            response = await asyncio.wait_for(
+                asyncio.to_thread(
+                    self.gemini_model.generate_content,
+                    full_prompt,
+                    generation_config=genai.types.GenerationConfig(
+                        temperature=settings.llm.temperature,
+                        max_output_tokens=settings.llm.max_tokens,
+                    ),
                 ),
+                timeout=settings.llm.timeout  # 使用配置的超时时间
             )
+            
+            logger.info("Gemini API call completed")
 
             # 检查响应是否有效
             if not response:
@@ -755,24 +780,124 @@ API端点信息：
         # 基于端点的请求体生成模拟数据
         if endpoint.request_body and isinstance(endpoint.request_body, dict):
             properties = endpoint.request_body.get("properties", {})
-            for field_name, field_info in properties.items():
-                if scenario == "normal":
-                    mock_data[field_name] = self._generate_mock_field_value(
-                        field_info, "normal"
-                    )
-                elif scenario == "error":
-                    mock_data[field_name] = self._generate_mock_field_value(
-                        field_info, "invalid"
-                    )
-                elif scenario == "edge":
-                    mock_data[field_name] = self._generate_mock_field_value(
-                        field_info, "edge"
-                    )
-                elif scenario == "security":
-                    mock_data[field_name] = self._generate_mock_field_value(
-                        field_info, "malicious"
-                    )
+            if properties:  # 只有当properties不为空时才使用
+                for field_name, field_info in properties.items():
+                    if scenario == "normal":
+                        mock_data[field_name] = self._generate_mock_field_value(
+                            field_info, "normal"
+                        )
+                    elif scenario == "error":
+                        mock_data[field_name] = self._generate_mock_field_value(
+                            field_info, "invalid"
+                        )
+                    elif scenario == "edge":
+                        mock_data[field_name] = self._generate_mock_field_value(
+                            field_info, "edge"
+                        )
+                    elif scenario == "security":
+                        mock_data[field_name] = self._generate_mock_field_value(
+                            field_info, "malicious"
+                        )
+            else:
+                # request_body存在但properties为空，使用智能生成
+                logger.info(f"Empty properties in request_body for {endpoint.path}, using smart mock data")
+                mock_data = self._generate_smart_mock_data(endpoint, scenario)
+        else:
+            # 当没有明确的请求体定义时，根据端点路径和方法智能生成数据
+            logger.info(f"No request_body found for {endpoint.path}, using smart mock data")
+            mock_data = self._generate_smart_mock_data(endpoint, scenario)
 
+        return mock_data
+
+    def _generate_smart_mock_data(
+        self, endpoint: APIEndpoint, scenario: str
+    ) -> Dict[str, Any]:
+        """根据端点路径和方法智能生成模拟数据"""
+        logger.info(f"Generating smart mock data for {endpoint.path} ({scenario})")
+        mock_data = {}
+        path = endpoint.path.lower()
+        method = endpoint.method.value.upper()
+        
+        # 根据端点路径推断数据结构
+        if "/chapter/generate" in path:
+            if scenario == "normal":
+                mock_data = {
+                    "prompt": "请生成一个关于勇敢冒险的小说章节",
+                    "max_tokens": 2000
+                }
+            elif scenario == "error":
+                mock_data = {
+                    "prompt": "",  # 空提示词
+                    "max_tokens": -1  # 无效值
+                }
+        elif "/chapter/choices" in path:
+            if scenario == "normal":
+                mock_data = {
+                    "chapter_id": "chapter_123456"
+                }
+            elif scenario == "error":
+                mock_data = {
+                    "chapter_id": ""  # 空ID
+                }
+        elif "/user/register" in path:
+            if scenario == "normal":
+                mock_data = {
+                    "email": "test@example.com",
+                    "password": "SecurePass123!"
+                }
+            elif scenario == "error":
+                mock_data = {
+                    "email": "invalid-email",  # 无效邮箱格式
+                    "password": "123"  # 密码太短
+                }
+        elif "/user/login" in path:
+            if scenario == "normal":
+                mock_data = {
+                    "email": "test@example.com",
+                    "password": "SecurePass123!"
+                }
+            elif scenario == "error":
+                mock_data = {
+                    "email": "wrong@example.com",
+                    "password": "wrongpassword"
+                }
+        elif "/plan/save" in path:
+            if scenario == "normal":
+                mock_data = {
+                    "title": "我的小说创作计划",
+                    "summary": "这是一个关于科幻冒险的小说创作计划"
+                }
+            elif scenario == "error":
+                mock_data = {
+                    "title": "",  # 空标题
+                    "summary": ""  # 空摘要
+                }
+        elif "/feedback" in path:
+            if scenario == "normal":
+                mock_data = {
+                    "message": "产品很好用，希望能增加更多功能",
+                    "email": "user@example.com"
+                }
+            elif scenario == "error":
+                mock_data = {
+                    "message": "",  # 空反馈
+                    "email": "invalid-email"
+                }
+        else:
+            # 通用数据生成逻辑
+            if method in ["POST", "PUT", "PATCH"]:
+                if scenario == "normal":
+                    mock_data = {
+                        "name": "测试数据",
+                        "description": "这是一个测试描述",
+                        "value": 123
+                    }
+                elif scenario == "error":
+                    mock_data = {
+                        "name": "",  # 空名称
+                        "value": "invalid"  # 无效值
+                    }
+        
         return mock_data
 
     def _generate_mock_field_value(
@@ -1069,15 +1194,24 @@ API端点信息：
 
     def is_available(self) -> bool:
         """检查生成器是否可用"""
-        # 暂时禁用AI生成器，直接使用模拟数据
+        provider = settings.llm.provider
+        if provider == "gemini":
+            # 检查API Key是否配置
+            if not settings.llm.gemini_api_key:
+                return False
+            # 检查库是否可用
+            if not GEMINI_AVAILABLE:
+                return False
+            return self.gemini_model is not None
+        elif provider == "openai":
+            # 检查API Key是否配置
+            if not settings.llm.openai_api_key:
+                return False
+            # 检查库是否可用
+            if not OPENAI_AVAILABLE:
+                return False
+            return self.openai_client is not None
         return False
-
-        # provider = settings.llm.provider
-        # if provider == "gemini":
-        #     return self.gemini_model is not None
-        # elif provider == "openai":
-        #     return self.openai_client is not None
-        # return False
 
     async def health_check(self) -> Dict[str, Any]:
         """健康检查"""

@@ -24,7 +24,7 @@ class LLMSettings(BaseSettings):
 
     # Gemini配置
     gemini_api_key: Optional[str] = Field(default="", env="GEMINI_API_KEY")
-    gemini_model: str = Field(default="gemini-2.5-flash", env="GEMINI_MODEL")
+    gemini_model: str = Field(default="gemini-2.5-flash-lite", env="GEMINI_MODEL")
 
     # 生成参数
     max_tokens: int = Field(default=2000, env="LLM_MAX_TOKENS")

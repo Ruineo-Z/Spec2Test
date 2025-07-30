@@ -4,106 +4,63 @@
   "metadata": {
     "version": "2.0.0",
     "description": "project 级资源注册表",
-    "createdAt": "2025-07-30T07:32:43.957Z",
-    "updatedAt": "2025-07-30T07:32:43.959Z",
-    "resourceCount": 6
+    "createdAt": "2025-07-30T13:09:28.786Z",
+    "updatedAt": "2025-07-30T13:09:28.790Z",
+    "resourceCount": 3
   },
   "resources": [
     {
-      "id": "python-development-principles",
+      "id": "tdd-development-flow",
       "source": "project",
       "protocol": "execution",
-      "name": "Python Development Principles 执行模式",
+      "name": "Tdd Development Flow 执行模式",
       "description": "执行模式，定义具体的行为模式",
-      "reference": "@project://.promptx/resource/role/python-expert/execution/python-development-principles.execution.md",
+      "reference": "@project://.promptx/resource/role/python-tdd-expert/execution/tdd-development-flow.execution.md",
       "metadata": {
-        "createdAt": "2025-07-30T07:32:43.958Z",
-        "updatedAt": "2025-07-30T07:32:43.958Z",
-        "scannedAt": "2025-07-30T07:32:43.958Z",
-        "path": "role/python-expert/execution/python-development-principles.execution.md"
+        "createdAt": "2025-07-30T13:09:28.788Z",
+        "updatedAt": "2025-07-30T13:09:28.788Z",
+        "scannedAt": "2025-07-30T13:09:28.788Z",
+        "path": "role/python-tdd-expert/execution/tdd-development-flow.execution.md"
       }
     },
     {
-      "id": "python-tech-stack",
-      "source": "project",
-      "protocol": "knowledge",
-      "name": "Python Tech Stack 知识库",
-      "description": "知识库，提供专业知识和信息",
-      "reference": "@project://.promptx/resource/role/python-expert/knowledge/python-tech-stack.knowledge.md",
-      "metadata": {
-        "createdAt": "2025-07-30T07:32:43.958Z",
-        "updatedAt": "2025-07-30T07:32:43.958Z",
-        "scannedAt": "2025-07-30T07:32:43.958Z",
-        "path": "role/python-expert/knowledge/python-tech-stack.knowledge.md"
-      }
-    },
-    {
-      "id": "python-expert",
+      "id": "python-tdd-expert",
       "source": "project",
       "protocol": "role",
-      "name": "Python Expert 角色",
+      "name": "Python Tdd Expert 角色",
       "description": "专业角色，提供特定领域的专业能力",
-      "reference": "@project://.promptx/resource/role/python-expert/python-expert.role.md",
+      "reference": "@project://.promptx/resource/role/python-tdd-expert/python-tdd-expert.role.md",
       "metadata": {
-        "createdAt": "2025-07-30T07:32:43.958Z",
-        "updatedAt": "2025-07-30T07:32:43.958Z",
-        "scannedAt": "2025-07-30T07:32:43.958Z",
-        "path": "role/python-expert/python-expert.role.md"
+        "createdAt": "2025-07-30T13:09:28.788Z",
+        "updatedAt": "2025-07-30T13:09:28.788Z",
+        "scannedAt": "2025-07-30T13:09:28.788Z",
+        "path": "role/python-tdd-expert/python-tdd-expert.role.md"
       }
     },
     {
-      "id": "tdd-workflow",
-      "source": "project",
-      "protocol": "execution",
-      "name": "Tdd Workflow 执行模式",
-      "description": "执行模式，定义具体的行为模式",
-      "reference": "@project://.promptx/resource/role/structured-programmer/execution/tdd-workflow.execution.md",
-      "metadata": {
-        "createdAt": "2025-07-30T07:32:43.959Z",
-        "updatedAt": "2025-07-30T07:32:43.959Z",
-        "scannedAt": "2025-07-30T07:32:43.959Z",
-        "path": "role/structured-programmer/execution/tdd-workflow.execution.md"
-      }
-    },
-    {
-      "id": "structured-programmer",
-      "source": "project",
-      "protocol": "role",
-      "name": "Structured Programmer 角色",
-      "description": "专业角色，提供特定领域的专业能力",
-      "reference": "@project://.promptx/resource/role/structured-programmer/structured-programmer.role.md",
-      "metadata": {
-        "createdAt": "2025-07-30T07:32:43.959Z",
-        "updatedAt": "2025-07-30T07:32:43.959Z",
-        "scannedAt": "2025-07-30T07:32:43.959Z",
-        "path": "role/structured-programmer/structured-programmer.role.md"
-      }
-    },
-    {
-      "id": "structured-development",
+      "id": "python-modern-stack",
       "source": "project",
       "protocol": "thought",
-      "name": "Structured Development 思维模式",
+      "name": "Python Modern Stack 思维模式",
       "description": "思维模式，指导AI的思考方式",
-      "reference": "@project://.promptx/resource/role/structured-programmer/thought/structured-development.thought.md",
+      "reference": "@project://.promptx/resource/role/python-tdd-expert/thought/python-modern-stack.thought.md",
       "metadata": {
-        "createdAt": "2025-07-30T07:32:43.959Z",
-        "updatedAt": "2025-07-30T07:32:43.959Z",
-        "scannedAt": "2025-07-30T07:32:43.959Z",
-        "path": "role/structured-programmer/thought/structured-development.thought.md"
+        "createdAt": "2025-07-30T13:09:28.789Z",
+        "updatedAt": "2025-07-30T13:09:28.789Z",
+        "scannedAt": "2025-07-30T13:09:28.789Z",
+        "path": "role/python-tdd-expert/thought/python-modern-stack.thought.md"
       }
     }
   ],
   "stats": {
-    "totalResources": 6,
+    "totalResources": 3,
     "byProtocol": {
-      "execution": 2,
-      "knowledge": 1,
-      "role": 2,
+      "execution": 1,
+      "role": 1,
       "thought": 1
     },
     "bySource": {
-      "project": 6
+      "project": 3
     }
   }
 }
