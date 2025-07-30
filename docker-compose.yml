@@ -1,8 +1,7 @@
 # Spec2Test Docker Compose配置
 # 用于本地开发环境
 
-version: '3.8'
-
+name: spec2test
 services:
   # 主应用服务
   app:

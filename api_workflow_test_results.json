@@ -1,0 +1,1720 @@
+{
+  "upload": {
+    "success": true,
+    "message": "文档解析成功",
+    "document_id": "doc_00000001",
+    "endpoints": [
+      {
+        "path": "/chapter/generate",
+        "method": "POST",
+        "summary": "生成小说章节",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "成功返回生成内容",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "chapter": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "path": "/chapter/choices",
+        "method": "POST",
+        "summary": "获取下一章节选项",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "返回章节分支选项",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "choices": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "path": "/user/register",
+        "method": "POST",
+        "summary": "注册新用户",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "注册成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user_id": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "path": "/user/login",
+        "method": "POST",
+        "summary": "用户登录",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "登录成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "path": "/user/profile",
+        "method": "GET",
+        "summary": "获取用户信息",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "返回用户信息",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user_id": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "path": "/plan/save",
+        "method": "POST",
+        "summary": "保存用户创作计划",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "保存成功"
+          }
+        }
+      },
+      {
+        "path": "/plan/list",
+        "method": "GET",
+        "summary": "获取用户计划列表",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "返回创作计划列表",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "plan_id": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "path": "/plan/{plan_id}",
+        "method": "GET",
+        "summary": "获取指定计划详情",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "返回计划详情",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string"
+                    },
+                    "summary": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "path": "/feedback",
+        "method": "POST",
+        "summary": "提交用户反馈",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "提交成功"
+          }
+        }
+      },
+      {
+        "path": "/health",
+        "method": "GET",
+        "summary": "系统健康检查",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "返回健康状态",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "ok"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ],
+    "analysis": {
+      "quality_score": 60.0,
+      "quality_level": "一般",
+      "completeness": 60.0,
+      "issues": [
+        {
+          "type": "missing_contact",
+          "message": "Contact information is missing",
+          "location": ""
+        },
+        {
+          "type": "missing_tags",
+          "message": "Endpoint POST /chapter/generate has no tags",
+          "location": "POST /chapter/generate"
+        },
+        {
+          "type": "missing_error_responses",
+          "message": "Endpoint POST /chapter/generate lacks error response definitions",
+          "location": "POST /chapter/generate"
+        },
+        {
+          "type": "missing_tags",
+          "message": "Endpoint POST /chapter/choices has no tags",
+          "location": "POST /chapter/choices"
+        },
+        {
+          "type": "missing_error_responses",
+          "message": "Endpoint POST /chapter/choices lacks error response definitions",
+          "location": "POST /chapter/choices"
+        }
+      ],
+      "suggestions": [
+        "Add request/response examples to 10 endpoints to help developers understand the API",
+        "Consider fixing 10 medium-severity issues to enhance documentation quality",
+        "Consider using OpenAPI linting tools to identify and fix additional documentation issues"
+      ],
+      "endpoints_count": 10,
+      "analysis_details": {
+        "has_examples": false,
+        "has_descriptions": false,
+        "has_schemas": true
+      }
+    }
+  },
+  "analyze": {
+    "quality_score": 85.5,
+    "quality_level": "良好",
+    "completeness": 80.0,
+    "issues": [
+      {
+        "type": "warning",
+        "message": "部分接口缺少示例",
+        "location": "/api/users"
+      }
+    ],
+    "suggestions": [
+      "建议为所有接口添加请求/响应示例",
+      "建议完善错误响应的描述"
+    ],
+    "endpoints_count": 1,
+    "analysis_details": {
+      "has_examples": false,
+      "has_descriptions": true,
+      "has_schemas": true
+    }
+  },
+  "test_cases": {
+    "success": true,
+    "message": "AI测试用例生成成功",
+    "test_suite_id": "ts_doc_00000001_1753858371",
+    "test_cases": [
+      {
+        "id": "0b4c108e-f25c-49e9-9502-2c71d49ff12c",
+        "name": "正常流程测试_1",
+        "description": "测试/chapter/generate的正常请求流程",
+        "endpoint_path": "/chapter/generate",
+        "method": "POST",
+        "test_type": "normal",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 2
+      },
+      {
+        "id": "af880231-adb6-4403-b102-908c8cb6c6ed",
+        "name": "正常流程测试_2",
+        "description": "测试/chapter/generate的正常请求流程",
+        "endpoint_path": "/chapter/generate",
+        "method": "POST",
+        "test_type": "normal",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 2
+      },
+      {
+        "id": "351d31ce-b926-406e-b59f-34e771925e70",
+        "name": "正常流程测试_3",
+        "description": "测试/chapter/generate的正常请求流程",
+        "endpoint_path": "/chapter/generate",
+        "method": "POST",
+        "test_type": "normal",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 2
+      },
+      {
+        "id": "90b8afc0-fb43-4d25-b095-c91e0c8d286e",
+        "name": "错误处理测试_1",
+        "description": "测试/chapter/generate的错误处理逻辑",
+        "endpoint_path": "/chapter/generate",
+        "method": "POST",
+        "test_type": "error",
+        "request_data": {},
+        "expected_response": {
+          "error": "Invalid request",
+          "code": 400
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "f893024a-aa77-4fa9-a616-d4f051884848",
+        "name": "错误处理测试_2",
+        "description": "测试/chapter/generate的错误处理逻辑",
+        "endpoint_path": "/chapter/generate",
+        "method": "POST",
+        "test_type": "error",
+        "request_data": {},
+        "expected_response": {
+          "error": "Invalid request",
+          "code": 400
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "aa897ece-b2f7-4d41-86f6-f90622908378",
+        "name": "错误处理测试_3",
+        "description": "测试/chapter/generate的错误处理逻辑",
+        "endpoint_path": "/chapter/generate",
+        "method": "POST",
+        "test_type": "error",
+        "request_data": {},
+        "expected_response": {
+          "error": "Invalid request",
+          "code": 400
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "b4a8a68f-c888-46d3-b2cd-5f459b98b611",
+        "name": "边界值测试_1",
+        "description": "测试/chapter/generate的边界值处理",
+        "endpoint_path": "/chapter/generate",
+        "method": "POST",
+        "test_type": "edge",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "0daeb7b0-e7c2-41da-9b91-408031f48927",
+        "name": "边界值测试_2",
+        "description": "测试/chapter/generate的边界值处理",
+        "endpoint_path": "/chapter/generate",
+        "method": "POST",
+        "test_type": "edge",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "606bac80-5b02-474a-bd17-7d110413595d",
+        "name": "边界值测试_3",
+        "description": "测试/chapter/generate的边界值处理",
+        "endpoint_path": "/chapter/generate",
+        "method": "POST",
+        "test_type": "edge",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "d16182a4-767b-4516-b7bd-fc472ea6503d",
+        "name": "正常流程测试_1",
+        "description": "测试/chapter/choices的正常请求流程",
+        "endpoint_path": "/chapter/choices",
+        "method": "POST",
+        "test_type": "normal",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 2
+      },
+      {
+        "id": "bd386db1-bd53-4bfd-a424-c01f0ed51c5b",
+        "name": "正常流程测试_2",
+        "description": "测试/chapter/choices的正常请求流程",
+        "endpoint_path": "/chapter/choices",
+        "method": "POST",
+        "test_type": "normal",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 2
+      },
+      {
+        "id": "a5508d1e-bb1a-4ae8-ba9c-e0069d3be484",
+        "name": "正常流程测试_3",
+        "description": "测试/chapter/choices的正常请求流程",
+        "endpoint_path": "/chapter/choices",
+        "method": "POST",
+        "test_type": "normal",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 2
+      },
+      {
+        "id": "ccc61ff0-081a-4fa2-a326-0c08ba3c6ea1",
+        "name": "错误处理测试_1",
+        "description": "测试/chapter/choices的错误处理逻辑",
+        "endpoint_path": "/chapter/choices",
+        "method": "POST",
+        "test_type": "error",
+        "request_data": {},
+        "expected_response": {
+          "error": "Invalid request",
+          "code": 400
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "1f68bf9f-ac68-496a-8868-5a3382ff1de7",
+        "name": "错误处理测试_2",
+        "description": "测试/chapter/choices的错误处理逻辑",
+        "endpoint_path": "/chapter/choices",
+        "method": "POST",
+        "test_type": "error",
+        "request_data": {},
+        "expected_response": {
+          "error": "Invalid request",
+          "code": 400
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "f3e3ca5e-c017-4561-ad7c-94d83ee94b1a",
+        "name": "错误处理测试_3",
+        "description": "测试/chapter/choices的错误处理逻辑",
+        "endpoint_path": "/chapter/choices",
+        "method": "POST",
+        "test_type": "error",
+        "request_data": {},
+        "expected_response": {
+          "error": "Invalid request",
+          "code": 400
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "65f8e6f8-c831-4246-b5b1-db69af90266a",
+        "name": "边界值测试_1",
+        "description": "测试/chapter/choices的边界值处理",
+        "endpoint_path": "/chapter/choices",
+        "method": "POST",
+        "test_type": "edge",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "54fea5ae-9803-4cbe-818f-b84aa1993f93",
+        "name": "边界值测试_2",
+        "description": "测试/chapter/choices的边界值处理",
+        "endpoint_path": "/chapter/choices",
+        "method": "POST",
+        "test_type": "edge",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "efe9c3c6-be02-4f6b-8486-7d636f5bf39f",
+        "name": "边界值测试_3",
+        "description": "测试/chapter/choices的边界值处理",
+        "endpoint_path": "/chapter/choices",
+        "method": "POST",
+        "test_type": "edge",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "f35f6471-4bcb-4075-a381-bc55bc824282",
+        "name": "正常流程测试_1",
+        "description": "测试/user/register的正常请求流程",
+        "endpoint_path": "/user/register",
+        "method": "POST",
+        "test_type": "normal",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 2
+      },
+      {
+        "id": "f6bed7e5-4924-421a-9120-ec76d3efe639",
+        "name": "正常流程测试_2",
+        "description": "测试/user/register的正常请求流程",
+        "endpoint_path": "/user/register",
+        "method": "POST",
+        "test_type": "normal",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 2
+      },
+      {
+        "id": "beaecb86-c8b2-4bfc-93aa-7bf810607917",
+        "name": "正常流程测试_3",
+        "description": "测试/user/register的正常请求流程",
+        "endpoint_path": "/user/register",
+        "method": "POST",
+        "test_type": "normal",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 2
+      },
+      {
+        "id": "54a5465a-52ed-4360-9f52-d165bce277b1",
+        "name": "错误处理测试_1",
+        "description": "测试/user/register的错误处理逻辑",
+        "endpoint_path": "/user/register",
+        "method": "POST",
+        "test_type": "error",
+        "request_data": {},
+        "expected_response": {
+          "error": "Invalid request",
+          "code": 400
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "fdee1008-73a6-4681-aea2-ba8174819909",
+        "name": "错误处理测试_2",
+        "description": "测试/user/register的错误处理逻辑",
+        "endpoint_path": "/user/register",
+        "method": "POST",
+        "test_type": "error",
+        "request_data": {},
+        "expected_response": {
+          "error": "Invalid request",
+          "code": 400
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "01479fea-5104-40ee-8bad-43b7e55c391c",
+        "name": "错误处理测试_3",
+        "description": "测试/user/register的错误处理逻辑",
+        "endpoint_path": "/user/register",
+        "method": "POST",
+        "test_type": "error",
+        "request_data": {},
+        "expected_response": {
+          "error": "Invalid request",
+          "code": 400
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "464eba32-a0e5-42b6-87ce-3f69b17a21f5",
+        "name": "边界值测试_1",
+        "description": "测试/user/register的边界值处理",
+        "endpoint_path": "/user/register",
+        "method": "POST",
+        "test_type": "edge",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "bb7a8e2c-f600-497e-ae80-0cbdd1a5ec65",
+        "name": "边界值测试_2",
+        "description": "测试/user/register的边界值处理",
+        "endpoint_path": "/user/register",
+        "method": "POST",
+        "test_type": "edge",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "cdf9e72b-d6c9-4126-8608-091c936af40b",
+        "name": "边界值测试_3",
+        "description": "测试/user/register的边界值处理",
+        "endpoint_path": "/user/register",
+        "method": "POST",
+        "test_type": "edge",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "8cba9eca-4f60-4580-b357-2f12a374e274",
+        "name": "正常流程测试_1",
+        "description": "测试/user/login的正常请求流程",
+        "endpoint_path": "/user/login",
+        "method": "POST",
+        "test_type": "normal",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 2
+      },
+      {
+        "id": "97a5798c-41cd-4d96-85dd-3bcf6769e0e7",
+        "name": "正常流程测试_2",
+        "description": "测试/user/login的正常请求流程",
+        "endpoint_path": "/user/login",
+        "method": "POST",
+        "test_type": "normal",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 2
+      },
+      {
+        "id": "79825719-15eb-447c-a94d-f0ca4fecbf81",
+        "name": "正常流程测试_3",
+        "description": "测试/user/login的正常请求流程",
+        "endpoint_path": "/user/login",
+        "method": "POST",
+        "test_type": "normal",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 2
+      },
+      {
+        "id": "e69d7dfc-e7a7-4884-ba0d-5b07d801b11a",
+        "name": "错误处理测试_1",
+        "description": "测试/user/login的错误处理逻辑",
+        "endpoint_path": "/user/login",
+        "method": "POST",
+        "test_type": "error",
+        "request_data": {},
+        "expected_response": {
+          "error": "Invalid request",
+          "code": 400
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "d88428a1-4303-4c86-a36b-0dc656301ed3",
+        "name": "错误处理测试_2",
+        "description": "测试/user/login的错误处理逻辑",
+        "endpoint_path": "/user/login",
+        "method": "POST",
+        "test_type": "error",
+        "request_data": {},
+        "expected_response": {
+          "error": "Invalid request",
+          "code": 400
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "4f837bef-74f7-43cd-9dbd-6990a128caed",
+        "name": "错误处理测试_3",
+        "description": "测试/user/login的错误处理逻辑",
+        "endpoint_path": "/user/login",
+        "method": "POST",
+        "test_type": "error",
+        "request_data": {},
+        "expected_response": {
+          "error": "Invalid request",
+          "code": 400
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "3201a28f-fb72-4339-972d-0b68651e873a",
+        "name": "边界值测试_1",
+        "description": "测试/user/login的边界值处理",
+        "endpoint_path": "/user/login",
+        "method": "POST",
+        "test_type": "edge",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "cb9089e5-05da-4189-9700-e5732b045d47",
+        "name": "边界值测试_2",
+        "description": "测试/user/login的边界值处理",
+        "endpoint_path": "/user/login",
+        "method": "POST",
+        "test_type": "edge",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "f20b37ad-550b-41ec-9351-695bff0da93f",
+        "name": "边界值测试_3",
+        "description": "测试/user/login的边界值处理",
+        "endpoint_path": "/user/login",
+        "method": "POST",
+        "test_type": "edge",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "017b8c21-3b27-448a-9a4a-66239609b282",
+        "name": "正常流程测试_1",
+        "description": "测试/user/profile的正常请求流程",
+        "endpoint_path": "/user/profile",
+        "method": "GET",
+        "test_type": "normal",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 2
+      },
+      {
+        "id": "8401e84f-a402-4cc0-8fca-e38be7bb2c02",
+        "name": "正常流程测试_2",
+        "description": "测试/user/profile的正常请求流程",
+        "endpoint_path": "/user/profile",
+        "method": "GET",
+        "test_type": "normal",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 2
+      },
+      {
+        "id": "98abef31-023c-4df1-9893-22d9305ff781",
+        "name": "正常流程测试_3",
+        "description": "测试/user/profile的正常请求流程",
+        "endpoint_path": "/user/profile",
+        "method": "GET",
+        "test_type": "normal",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 2
+      },
+      {
+        "id": "e355ecc0-8450-4927-9798-2ad20d2e9227",
+        "name": "错误处理测试_1",
+        "description": "测试/user/profile的错误处理逻辑",
+        "endpoint_path": "/user/profile",
+        "method": "GET",
+        "test_type": "error",
+        "request_data": {},
+        "expected_response": {
+          "error": "Invalid request",
+          "code": 400
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "cf77c8bb-e973-4812-9b3d-1413e876828b",
+        "name": "错误处理测试_2",
+        "description": "测试/user/profile的错误处理逻辑",
+        "endpoint_path": "/user/profile",
+        "method": "GET",
+        "test_type": "error",
+        "request_data": {},
+        "expected_response": {
+          "error": "Invalid request",
+          "code": 400
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "ab9e1278-e448-415d-ae27-6494552b9981",
+        "name": "错误处理测试_3",
+        "description": "测试/user/profile的错误处理逻辑",
+        "endpoint_path": "/user/profile",
+        "method": "GET",
+        "test_type": "error",
+        "request_data": {},
+        "expected_response": {
+          "error": "Invalid request",
+          "code": 400
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "41877c55-a01c-42ba-a474-7842086bd037",
+        "name": "边界值测试_1",
+        "description": "测试/user/profile的边界值处理",
+        "endpoint_path": "/user/profile",
+        "method": "GET",
+        "test_type": "edge",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "20383635-ef5f-45e7-9fe8-74156f5912c2",
+        "name": "边界值测试_2",
+        "description": "测试/user/profile的边界值处理",
+        "endpoint_path": "/user/profile",
+        "method": "GET",
+        "test_type": "edge",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "8ea52bf3-deb1-4167-884e-8dbd6bda9134",
+        "name": "边界值测试_3",
+        "description": "测试/user/profile的边界值处理",
+        "endpoint_path": "/user/profile",
+        "method": "GET",
+        "test_type": "edge",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "7dbc5f93-d716-4c8b-b390-1e5dfc54a642",
+        "name": "正常流程测试_1",
+        "description": "测试/plan/save的正常请求流程",
+        "endpoint_path": "/plan/save",
+        "method": "POST",
+        "test_type": "normal",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 2
+      },
+      {
+        "id": "71e3e466-c35f-460b-bf8f-2c6ac4b7ef19",
+        "name": "正常流程测试_2",
+        "description": "测试/plan/save的正常请求流程",
+        "endpoint_path": "/plan/save",
+        "method": "POST",
+        "test_type": "normal",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 2
+      },
+      {
+        "id": "b216059b-2968-468d-b8b6-4611fc2aef00",
+        "name": "正常流程测试_3",
+        "description": "测试/plan/save的正常请求流程",
+        "endpoint_path": "/plan/save",
+        "method": "POST",
+        "test_type": "normal",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 2
+      },
+      {
+        "id": "2770fe83-a565-4606-89ab-420f2fed4943",
+        "name": "错误处理测试_1",
+        "description": "测试/plan/save的错误处理逻辑",
+        "endpoint_path": "/plan/save",
+        "method": "POST",
+        "test_type": "error",
+        "request_data": {},
+        "expected_response": {
+          "error": "Invalid request",
+          "code": 400
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "ab02874e-9c94-4f4a-abdd-b9ccf2eb7c27",
+        "name": "错误处理测试_2",
+        "description": "测试/plan/save的错误处理逻辑",
+        "endpoint_path": "/plan/save",
+        "method": "POST",
+        "test_type": "error",
+        "request_data": {},
+        "expected_response": {
+          "error": "Invalid request",
+          "code": 400
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "346d099f-ccc9-4712-9ae2-5b79822225a0",
+        "name": "错误处理测试_3",
+        "description": "测试/plan/save的错误处理逻辑",
+        "endpoint_path": "/plan/save",
+        "method": "POST",
+        "test_type": "error",
+        "request_data": {},
+        "expected_response": {
+          "error": "Invalid request",
+          "code": 400
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "3d8ac1be-5fdd-49c3-9940-ccebcac8af1a",
+        "name": "边界值测试_1",
+        "description": "测试/plan/save的边界值处理",
+        "endpoint_path": "/plan/save",
+        "method": "POST",
+        "test_type": "edge",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "ac7a18ff-c96b-46f7-bae7-798b1fb73c38",
+        "name": "边界值测试_2",
+        "description": "测试/plan/save的边界值处理",
+        "endpoint_path": "/plan/save",
+        "method": "POST",
+        "test_type": "edge",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "982c9f6a-72a9-4f2a-9504-ea5372026907",
+        "name": "边界值测试_3",
+        "description": "测试/plan/save的边界值处理",
+        "endpoint_path": "/plan/save",
+        "method": "POST",
+        "test_type": "edge",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "fa41a9b2-4164-4030-be04-277da36cf0de",
+        "name": "正常流程测试_1",
+        "description": "测试/plan/list的正常请求流程",
+        "endpoint_path": "/plan/list",
+        "method": "GET",
+        "test_type": "normal",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 2
+      },
+      {
+        "id": "c83e8ad9-31ae-4bd2-a686-fbcd50c26279",
+        "name": "正常流程测试_2",
+        "description": "测试/plan/list的正常请求流程",
+        "endpoint_path": "/plan/list",
+        "method": "GET",
+        "test_type": "normal",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 2
+      },
+      {
+        "id": "4146f863-6d87-4e4a-af3b-d57cb7d39b59",
+        "name": "正常流程测试_3",
+        "description": "测试/plan/list的正常请求流程",
+        "endpoint_path": "/plan/list",
+        "method": "GET",
+        "test_type": "normal",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 2
+      },
+      {
+        "id": "df9aac10-df79-469d-9cb0-d0022d457599",
+        "name": "错误处理测试_1",
+        "description": "测试/plan/list的错误处理逻辑",
+        "endpoint_path": "/plan/list",
+        "method": "GET",
+        "test_type": "error",
+        "request_data": {},
+        "expected_response": {
+          "error": "Invalid request",
+          "code": 400
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "a02e0526-d782-464e-91df-d4c0abc54a51",
+        "name": "错误处理测试_2",
+        "description": "测试/plan/list的错误处理逻辑",
+        "endpoint_path": "/plan/list",
+        "method": "GET",
+        "test_type": "error",
+        "request_data": {},
+        "expected_response": {
+          "error": "Invalid request",
+          "code": 400
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "41a8e93c-d7c7-45bf-84f1-db74b1496821",
+        "name": "错误处理测试_3",
+        "description": "测试/plan/list的错误处理逻辑",
+        "endpoint_path": "/plan/list",
+        "method": "GET",
+        "test_type": "error",
+        "request_data": {},
+        "expected_response": {
+          "error": "Invalid request",
+          "code": 400
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "9c5ad2de-b9b1-4010-bb5f-bef6cefc17b0",
+        "name": "边界值测试_1",
+        "description": "测试/plan/list的边界值处理",
+        "endpoint_path": "/plan/list",
+        "method": "GET",
+        "test_type": "edge",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "5e922fb7-9a95-4e35-b50c-2195ce057b2b",
+        "name": "边界值测试_2",
+        "description": "测试/plan/list的边界值处理",
+        "endpoint_path": "/plan/list",
+        "method": "GET",
+        "test_type": "edge",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "71fbaa25-38b4-49c9-b88e-f197f2107472",
+        "name": "边界值测试_3",
+        "description": "测试/plan/list的边界值处理",
+        "endpoint_path": "/plan/list",
+        "method": "GET",
+        "test_type": "edge",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "e7470445-f0d4-46d7-81c1-a0efc02225a2",
+        "name": "正常流程测试_1",
+        "description": "测试/plan/{plan_id}的正常请求流程",
+        "endpoint_path": "/plan/{plan_id}",
+        "method": "GET",
+        "test_type": "normal",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 2
+      },
+      {
+        "id": "45f34571-97be-4f53-b713-8111b0ea9e59",
+        "name": "正常流程测试_2",
+        "description": "测试/plan/{plan_id}的正常请求流程",
+        "endpoint_path": "/plan/{plan_id}",
+        "method": "GET",
+        "test_type": "normal",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 2
+      },
+      {
+        "id": "33029e4e-7abc-45f6-aa06-64982b2ed7d6",
+        "name": "正常流程测试_3",
+        "description": "测试/plan/{plan_id}的正常请求流程",
+        "endpoint_path": "/plan/{plan_id}",
+        "method": "GET",
+        "test_type": "normal",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 2
+      },
+      {
+        "id": "e96c8203-5f43-4514-b4cd-35c60bf377ce",
+        "name": "错误处理测试_1",
+        "description": "测试/plan/{plan_id}的错误处理逻辑",
+        "endpoint_path": "/plan/{plan_id}",
+        "method": "GET",
+        "test_type": "error",
+        "request_data": {},
+        "expected_response": {
+          "error": "Invalid request",
+          "code": 400
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "65457e1a-03e4-4e82-9ed3-724399f4e458",
+        "name": "错误处理测试_2",
+        "description": "测试/plan/{plan_id}的错误处理逻辑",
+        "endpoint_path": "/plan/{plan_id}",
+        "method": "GET",
+        "test_type": "error",
+        "request_data": {},
+        "expected_response": {
+          "error": "Invalid request",
+          "code": 400
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "69e841cf-c3ff-48f2-a75c-90e218e6a471",
+        "name": "错误处理测试_3",
+        "description": "测试/plan/{plan_id}的错误处理逻辑",
+        "endpoint_path": "/plan/{plan_id}",
+        "method": "GET",
+        "test_type": "error",
+        "request_data": {},
+        "expected_response": {
+          "error": "Invalid request",
+          "code": 400
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "6bf7cf99-1040-4033-82ba-80b65c2c8068",
+        "name": "边界值测试_1",
+        "description": "测试/plan/{plan_id}的边界值处理",
+        "endpoint_path": "/plan/{plan_id}",
+        "method": "GET",
+        "test_type": "edge",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "4ac97b11-e3dc-4a04-9329-205534b348b5",
+        "name": "边界值测试_2",
+        "description": "测试/plan/{plan_id}的边界值处理",
+        "endpoint_path": "/plan/{plan_id}",
+        "method": "GET",
+        "test_type": "edge",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "6ba72640-2d15-419b-b48a-c005ca125d07",
+        "name": "边界值测试_3",
+        "description": "测试/plan/{plan_id}的边界值处理",
+        "endpoint_path": "/plan/{plan_id}",
+        "method": "GET",
+        "test_type": "edge",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "55f98a81-b7c8-4d82-9d6c-4f0c66166572",
+        "name": "正常流程测试_1",
+        "description": "测试/feedback的正常请求流程",
+        "endpoint_path": "/feedback",
+        "method": "POST",
+        "test_type": "normal",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 2
+      },
+      {
+        "id": "5809d69c-ab76-416f-8795-0f5942007373",
+        "name": "正常流程测试_2",
+        "description": "测试/feedback的正常请求流程",
+        "endpoint_path": "/feedback",
+        "method": "POST",
+        "test_type": "normal",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 2
+      },
+      {
+        "id": "8d2e2f8e-ac32-4100-939d-9824eb35558e",
+        "name": "正常流程测试_3",
+        "description": "测试/feedback的正常请求流程",
+        "endpoint_path": "/feedback",
+        "method": "POST",
+        "test_type": "normal",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 2
+      },
+      {
+        "id": "8da3f7f9-f88b-429f-b07b-fa9e7ee473a4",
+        "name": "错误处理测试_1",
+        "description": "测试/feedback的错误处理逻辑",
+        "endpoint_path": "/feedback",
+        "method": "POST",
+        "test_type": "error",
+        "request_data": {},
+        "expected_response": {
+          "error": "Invalid request",
+          "code": 400
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "b83917bc-f31c-4607-9454-910357932f85",
+        "name": "错误处理测试_2",
+        "description": "测试/feedback的错误处理逻辑",
+        "endpoint_path": "/feedback",
+        "method": "POST",
+        "test_type": "error",
+        "request_data": {},
+        "expected_response": {
+          "error": "Invalid request",
+          "code": 400
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "bf6b7f0a-4b48-4f98-addc-73980d7330ae",
+        "name": "错误处理测试_3",
+        "description": "测试/feedback的错误处理逻辑",
+        "endpoint_path": "/feedback",
+        "method": "POST",
+        "test_type": "error",
+        "request_data": {},
+        "expected_response": {
+          "error": "Invalid request",
+          "code": 400
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "c7c2bf52-1a26-45e1-8a88-1e70cec0d850",
+        "name": "边界值测试_1",
+        "description": "测试/feedback的边界值处理",
+        "endpoint_path": "/feedback",
+        "method": "POST",
+        "test_type": "edge",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "3e28ee76-f46c-4956-87b5-e91d49f8d694",
+        "name": "边界值测试_2",
+        "description": "测试/feedback的边界值处理",
+        "endpoint_path": "/feedback",
+        "method": "POST",
+        "test_type": "edge",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "d5f38103-5693-409e-a11b-d7438481e852",
+        "name": "边界值测试_3",
+        "description": "测试/feedback的边界值处理",
+        "endpoint_path": "/feedback",
+        "method": "POST",
+        "test_type": "edge",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "19711936-5438-408e-8a00-6b2778b8fe65",
+        "name": "正常流程测试_1",
+        "description": "测试/health的正常请求流程",
+        "endpoint_path": "/health",
+        "method": "GET",
+        "test_type": "normal",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 2
+      },
+      {
+        "id": "ad9340dd-7ce1-428d-994e-ae5b9dccfb73",
+        "name": "正常流程测试_2",
+        "description": "测试/health的正常请求流程",
+        "endpoint_path": "/health",
+        "method": "GET",
+        "test_type": "normal",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 2
+      },
+      {
+        "id": "1e7fed19-c47f-4305-a600-5f08d2686380",
+        "name": "正常流程测试_3",
+        "description": "测试/health的正常请求流程",
+        "endpoint_path": "/health",
+        "method": "GET",
+        "test_type": "normal",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 2
+      },
+      {
+        "id": "8ba1c4c6-9c75-4a36-a318-147084905f38",
+        "name": "错误处理测试_1",
+        "description": "测试/health的错误处理逻辑",
+        "endpoint_path": "/health",
+        "method": "GET",
+        "test_type": "error",
+        "request_data": {},
+        "expected_response": {
+          "error": "Invalid request",
+          "code": 400
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "3782cdf8-9cda-41f1-bed7-de1c26bdc2c8",
+        "name": "错误处理测试_2",
+        "description": "测试/health的错误处理逻辑",
+        "endpoint_path": "/health",
+        "method": "GET",
+        "test_type": "error",
+        "request_data": {},
+        "expected_response": {
+          "error": "Invalid request",
+          "code": 400
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "81e21340-a02b-4ced-b36c-424f73fa57a9",
+        "name": "错误处理测试_3",
+        "description": "测试/health的错误处理逻辑",
+        "endpoint_path": "/health",
+        "method": "GET",
+        "test_type": "error",
+        "request_data": {},
+        "expected_response": {
+          "error": "Invalid request",
+          "code": 400
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "e8569c53-187a-43ce-94df-f4e97e361e4c",
+        "name": "边界值测试_1",
+        "description": "测试/health的边界值处理",
+        "endpoint_path": "/health",
+        "method": "GET",
+        "test_type": "edge",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "57cfd4de-a719-4c6f-b581-4d9edd06a35e",
+        "name": "边界值测试_2",
+        "description": "测试/health的边界值处理",
+        "endpoint_path": "/health",
+        "method": "GET",
+        "test_type": "edge",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 3
+      },
+      {
+        "id": "a1f0b7d5-e03d-46ad-b952-e96fd94b4601",
+        "name": "边界值测试_3",
+        "description": "测试/health的边界值处理",
+        "endpoint_path": "/health",
+        "method": "GET",
+        "test_type": "edge",
+        "request_data": {},
+        "expected_response": {
+          "status": "success",
+          "data": {}
+        },
+        "assertions": [],
+        "priority": 3
+      }
+    ],
+    "generation_stats": {
+      "total_cases": 90,
+      "normal_cases": 30,
+      "error_cases": 30,
+      "edge_cases": 30,
+      "security_cases": 0,
+      "generation_time": "0.03s",
+      "ai_model": "gpt-4",
+      "endpoints_processed": 10
+    },
+    "ai_analysis": "基于AI分析生成的测试用例，覆盖了主要功能场景和错误处理。"
+  },
+  "test_code": {
+    "success": true,
+    "message": "测试代码生成成功",
+    "code_project_id": "cp_123456",
+    "generated_files": [
+      {
+        "path": "test_api_users.py",
+        "content": "# Generated test file for /api/users\nimport pytest\nimport requests\n\ndef test_get_users_normal():\n    pass",
+        "size": "1024"
+      },
+      {
+        "path": "conftest.py",
+        "content": "# Test configuration\nimport pytest\n\n@pytest.fixture\ndef api_client():\n    pass",
+        "size": "512"
+      },
+      {
+        "path": "requirements.txt",
+        "content": "pytest>=7.4.0\nrequests>=2.31.0\npytest-html>=4.1.0",
+        "size": "64"
+      }
+    ],
+    "project_structure": {
+      "root": "test_project_123456",
+      "files": [
+        "test_api_users.py",
+        "conftest.py",
+        "requirements.txt"
+      ],
+      "framework": "pytest",
+      "total_size": 1600
+    },
+    "execution_instructions": [
+      "1. 安装依赖: pip install -r requirements.txt",
+      "2. 运行测试: pytest -v",
+      "3. 生成报告: pytest --html=report.html"
+    ]
+  },
+  "documents": {
+    "documents": [
+      {
+        "id": "doc_00000001",
+        "filename": "test.yaml",
+        "upload_time": "2025-07-30T06:21:10",
+        "quality_score": 85.5,
+        "endpoints_count": 1,
+        "status": "parsed",
+        "file_size": 5475,
+        "document_type": "openapi",
+        "quality_level": "good"
+      }
+    ],
+    "total": 1
+  }
+}

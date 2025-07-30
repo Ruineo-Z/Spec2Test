@@ -1,7 +1,7 @@
 # Spec2Test Docker镜像
 # 基于Python 3.12的轻量级Alpine镜像
 
-FROM python:3.12-slim
+FROM python:3.11-slim
 
 # 设置工作目录
 WORKDIR /app
@@ -20,15 +20,12 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# 复制依赖文件
-COPY pyproject.toml ./
+# 复制所有文件
+COPY . .
 
 # 安装Python依赖
 RUN pip install --upgrade pip && \
     pip install -e .
-
-# 复制应用代码
-COPY . .
 
 # 创建非root用户
 RUN useradd --create-home --shell /bin/bash app && \

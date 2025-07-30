@@ -4,7 +4,7 @@ import asyncio
 import os
 import tempfile
 from pathlib import Path
-from typing import TYPE_CHECKING, AsyncGenerator, Generator
+from typing import TYPE_CHECKING, Any, AsyncGenerator, Dict, Generator
 
 try:
     import pytest
@@ -296,6 +296,90 @@ def sample_invalid_openapi_spec() -> dict:
             }
         },
     }
+
+
+@pytest.fixture
+def test_yaml_content() -> str:
+    """读取test.yaml文件内容用于测试"""
+    test_yaml_path = Path("/Users/augenstern/development/personal/Spec2Test/test.yaml")
+
+    if not test_yaml_path.exists():
+        pytest.skip("test.yaml文件不存在")
+
+    with open(test_yaml_path, "r", encoding="utf-8") as f:
+        return f.read()
+
+
+@pytest.fixture
+def test_yaml_file() -> Path:
+    """返回test.yaml文件路径用于测试"""
+    test_yaml_path = Path("/Users/augenstern/development/personal/Spec2Test/test.yaml")
+
+    if not test_yaml_path.exists():
+        pytest.skip("test.yaml文件不存在")
+
+    return test_yaml_path
+
+
+@pytest.fixture
+def test_yaml_spec() -> Dict[str, Any]:
+    """加载test.yaml规范文件"""
+    import yaml
+
+    test_yaml_path = Path("/Users/augenstern/development/personal/Spec2Test/test.yaml")
+
+    if not test_yaml_path.exists():
+        pytest.skip("test.yaml文件不存在")
+
+    with open(test_yaml_path, "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
+
+
+# 测试辅助函数
+def assert_error_response(response, expected_status: int = None):
+    """验证错误响应的结构"""
+    if expected_status:
+        assert response.status_code == expected_status
+
+    assert response.status_code >= 400
+
+    # 验证响应是JSON格式
+    try:
+        error_data = response.json()
+    except ValueError:
+        pytest.fail("错误响应不是有效的JSON格式")
+
+    # 验证错误响应包含必要字段
+    assert "detail" in error_data or "message" in error_data, "错误响应缺少错误信息字段"
+
+    return error_data
+
+
+def assert_valid_document_id(document_id):
+    """验证文档ID的有效性"""
+    assert document_id is not None, "文档ID不能为None"
+    assert isinstance(document_id, (str, int)), "文档ID必须是字符串或整数"
+    if isinstance(document_id, str):
+        assert len(document_id.strip()) > 0, "文档ID不能为空字符串"
+    return True
+
+
+def assert_valid_response_structure(response, expected_fields: list = None):
+    """验证响应结构的有效性"""
+    assert response.status_code < 400, f"响应状态码错误: {response.status_code}"
+
+    # 验证响应是JSON格式
+    try:
+        response_data = response.json()
+    except ValueError:
+        pytest.fail("响应不是有效的JSON格式")
+
+    # 验证必需字段
+    if expected_fields:
+        for field in expected_fields:
+            assert field in response_data, f"响应缺少必需字段: {field}"
+
+    return response_data
 
 
 # 测试标记

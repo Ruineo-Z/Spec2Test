@@ -74,6 +74,30 @@ class OpenAPIParser:
                 details={"error": str(e)},
             )
 
+    def parse_openapi_content(self, content: str) -> List[APIEndpoint]:
+        """解析OpenAPI文档内容并提取端点
+
+        Args:
+            content: 文档内容字符串
+
+        Returns:
+            API端点列表
+
+        Raises:
+            DocumentParseError: 内容解析失败
+        """
+        try:
+            # 解析文档内容
+            spec = self.parse_content(content)
+            # 提取端点
+            endpoints = self.extract_endpoints(spec)
+            return endpoints
+        except Exception as e:
+            self.logger.error(f"Failed to parse OpenAPI content: {e}")
+            raise DocumentParseError(
+                f"OpenAPI content parsing failed: {e}", details={"error": str(e)}
+            )
+
     def parse_content(self, content: str) -> Dict[str, Any]:
         """解析OpenAPI文档内容
 

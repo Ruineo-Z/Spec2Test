@@ -1,6 +1,35 @@
 # Spec2Test
 通过AI实现自动化测试流水线
 
+## 快速开始
+
+### 环境变量配置
+
+1. 复制环境变量模板文件：
+```bash
+cp .env.example .env
+```
+
+2. 编辑 `.env` 文件，配置必要的环境变量：
+```bash
+# LLM配置（必需）
+LLM_PROVIDER=gemini  # 或 openai
+GEMINI_API_KEY=your-gemini-api-key
+# 或
+OPENAI_API_KEY=your-openai-api-key
+
+# 应用配置
+SECRET_KEY=your-secret-key
+DEBUG=true  # 开发环境
+```
+
+3. 启动应用：
+```bash
+python main.py
+```
+
+详细的环境变量配置说明请参考：[环境变量配置指南](docs/ENVIRONMENT_SETUP.md)
+
 ## 项目结构说明
 
 ### 核心必需文件/目录 ⭐

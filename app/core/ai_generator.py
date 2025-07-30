@@ -465,7 +465,7 @@ API端点信息：
 
     async def _call_llm(self, prompt: str) -> str:
         """调用LLM API（支持OpenAI和Gemini）"""
-        provider = getattr(settings, "LLM_PROVIDER", "gemini")
+        provider = settings.llm.provider
 
         if provider == "gemini":
             return await self._call_gemini(prompt)
@@ -490,8 +490,8 @@ API端点信息：
                 self.gemini_model.generate_content,
                 full_prompt,
                 generation_config=genai.types.GenerationConfig(
-                    temperature=getattr(settings, "LLM_TEMPERATURE", 0.1),
-                    max_output_tokens=getattr(settings, "LLM_MAX_TOKENS", 8000),
+                    temperature=settings.llm.temperature,
+                    max_output_tokens=settings.llm.max_tokens,
                 ),
             )
 
@@ -538,13 +538,13 @@ API端点信息：
 
         try:
             response = await self.openai_client.chat.completions.create(
-                model=getattr(settings, "OPENAI_MODEL", "gpt-3.5-turbo"),
+                model=settings.llm.openai_model,
                 messages=[
                     {"role": "system", "content": "你是一个专业的API测试工程师，擅长生成高质量的测试用例。"},
                     {"role": "user", "content": prompt},
                 ],
-                temperature=getattr(settings, "LLM_TEMPERATURE", 0.1),
-                max_tokens=getattr(settings, "LLM_MAX_TOKENS", 2000),
+                temperature=settings.llm.temperature,
+                max_tokens=settings.llm.max_tokens,
             )
 
             return response.choices[0].message.content
@@ -1069,16 +1069,19 @@ API端点信息：
 
     def is_available(self) -> bool:
         """检查生成器是否可用"""
-        provider = getattr(settings, "LLM_PROVIDER", "gemini")
-        if provider == "gemini":
-            return self.gemini_model is not None
-        elif provider == "openai":
-            return self.openai_client is not None
+        # 暂时禁用AI生成器，直接使用模拟数据
         return False
+
+        # provider = settings.llm.provider
+        # if provider == "gemini":
+        #     return self.gemini_model is not None
+        # elif provider == "openai":
+        #     return self.openai_client is not None
+        # return False
 
     async def health_check(self) -> Dict[str, Any]:
         """健康检查"""
-        provider = getattr(settings, "LLM_PROVIDER", "gemini")
+        provider = settings.llm.provider
 
         status = {
             "available": self.is_available(),
@@ -1088,10 +1091,10 @@ API端点信息：
 
         if provider == "gemini":
             status["gemini_model"] = self.gemini_model is not None
-            status["model_name"] = getattr(settings, "GEMINI_MODEL", "gemini-2.5-flash")
+            status["model_name"] = settings.llm.gemini_model
         elif provider == "openai":
             status["openai_client"] = self.openai_client is not None
-            status["model_name"] = getattr(settings, "OPENAI_MODEL", "gpt-3.5-turbo")
+            status["model_name"] = settings.llm.openai_model
 
         if self.is_available():
             try:

@@ -23,9 +23,7 @@ class LLMSettings(BaseSettings):
     openai_base_url: Optional[str] = Field(default=None, env="OPENAI_BASE_URL")
 
     # Gemini配置
-    gemini_api_key: Optional[str] = Field(
-        default="AIzaSyBnllTxBgQY6CIunsWLthUrOK0KTrVcFfU", env="GEMINI_API_KEY"
-    )
+    gemini_api_key: Optional[str] = Field(default="", env="GEMINI_API_KEY")
     gemini_model: str = Field(default="gemini-2.5-flash", env="GEMINI_MODEL")
 
     # 生成参数
@@ -37,7 +35,7 @@ class LLMSettings(BaseSettings):
     max_retries: int = Field(default=3, env="LLM_MAX_RETRIES")
     retry_delay: float = Field(default=1.0, env="LLM_RETRY_DELAY")
 
-    model_config = {"env_prefix": "LLM_", "case_sensitive": False}
+    model_config = {"case_sensitive": False, "extra": "ignore"}
 
 
 class TestSettings(BaseSettings):
@@ -65,30 +63,32 @@ class TestSettings(BaseSettings):
     )
     include_ai_analysis: bool = Field(default=True, env="TEST_INCLUDE_AI_ANALYSIS")
 
-    model_config = {"env_prefix": "TEST_", "case_sensitive": False}
+    model_config = {"case_sensitive": False, "extra": "ignore"}
 
 
 class DatabaseSettings(BaseSettings):
     """数据库配置"""
 
-    driver: str = Field("sqlite", description="数据库驱动")
-    host: str = Field("localhost", description="数据库主机")
-    port: int = Field(5432, description="数据库端口")
-    name: str = Field("spec2test.db", description="数据库名称")
-    user: Optional[str] = Field(None, description="数据库用户")
-    password: Optional[str] = Field(None, description="数据库密码")
+    driver: str = Field(default="sqlite", env="DB_DRIVER", description="数据库驱动")
+    host: str = Field(default="localhost", env="DB_HOST", description="数据库主机")
+    port: int = Field(default=5432, env="DB_PORT", description="数据库端口")
+    name: str = Field(default="spec2test.db", env="DB_NAME", description="数据库名称")
+    user: Optional[str] = Field(default=None, env="DB_USER", description="数据库用户")
+    password: Optional[str] = Field(
+        default=None, env="DB_PASSWORD", description="数据库密码"
+    )
 
     # 连接池配置
-    pool_size: int = Field(10, description="连接池大小")
-    max_overflow: int = Field(20, description="最大溢出连接数")
-    pool_timeout: int = Field(30, description="连接池超时时间")
-    pool_recycle: int = Field(3600, description="连接回收时间")
+    pool_size: int = Field(default=10, env="DB_POOL_SIZE", description="连接池大小")
+    max_overflow: int = Field(default=20, env="DB_MAX_OVERFLOW", description="最大溢出连接数")
+    pool_timeout: int = Field(default=30, env="DB_POOL_TIMEOUT", description="连接池超时时间")
+    pool_recycle: int = Field(default=3600, env="DB_POOL_RECYCLE", description="连接回收时间")
 
     # 其他配置
-    echo: bool = Field(False, description="是否打印SQL语句")
-    echo_pool: bool = Field(False, description="是否打印连接池信息")
+    echo: bool = Field(default=False, env="DB_ECHO", description="是否打印SQL语句")
+    echo_pool: bool = Field(default=False, env="DB_ECHO_POOL", description="是否打印连接池信息")
 
-    model_config = {"env_prefix": "DB_", "case_sensitive": False}
+    model_config = {"case_sensitive": False, "extra": "ignore"}
 
 
 class LogSettings(BaseSettings):
@@ -122,7 +122,7 @@ class LogSettings(BaseSettings):
         default=["password", "token", "api_key", "secret"], env="LOG_SENSITIVE_FIELDS"
     )
 
-    model_config = {"env_prefix": "LOG_", "case_sensitive": False}
+    model_config = {"case_sensitive": False, "extra": "ignore"}
 
 
 class AppSettings(BaseSettings):
@@ -183,7 +183,7 @@ class AppSettings(BaseSettings):
         "env_file": ".env",
         "env_file_encoding": "utf-8",
         "case_sensitive": False,
-        "env_nested_delimiter": "__",
+        "extra": "ignore",
     }
 
 

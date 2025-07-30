@@ -3,22 +3,24 @@
 数据库迁移环境配置文件。
 """
 
-from logging.config import fileConfig
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
-from alembic import context
 import os
 import sys
+from logging.config import fileConfig
 from pathlib import Path
+
+from sqlalchemy import engine_from_config, pool
+
+from alembic import context
 
 # 添加项目根目录到Python路径
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
+from app.config.settings import settings
+
 # 导入模型和配置
 from app.core.database import Base, get_database_url
 from app.core.db_models import *  # 导入所有模型
-from app.config import get_settings
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -46,9 +48,8 @@ def get_url():
         url = os.getenv("DATABASE_URL")
         if url:
             return url
-        
+
         # 从配置获取
-        settings = get_settings()
         return get_database_url(async_mode=False)
     except Exception:
         # 默认使用SQLite
@@ -91,7 +92,7 @@ def run_migrations_online() -> None:
     # 设置数据库URL
     configuration = config.get_section(config.config_ini_section)
     configuration["sqlalchemy.url"] = get_url()
-    
+
     connectable = engine_from_config(
         configuration,
         prefix="sqlalchemy.",
