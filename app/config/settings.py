@@ -162,22 +162,20 @@ class AppSettings(BaseSettings):
     temp_dir: Path = Field(default=Path("./temp"), env="TEMP_DIR")
 
     # 子配置
-    llm: LLMSettings = LLMSettings()
-    test: TestSettings = TestSettings()
-    database: DatabaseSettings = DatabaseSettings()
-    log: LogSettings = LogSettings()
+    llm: LLMSettings = Field(default_factory=LLMSettings)
+    test: TestSettings = Field(default_factory=TestSettings)
+    database: DatabaseSettings = Field(default_factory=DatabaseSettings)
+    log: LogSettings = Field(default_factory=LogSettings)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         # 确保目录存在
         self.work_dir.mkdir(parents=True, exist_ok=True)
         self.temp_dir.mkdir(parents=True, exist_ok=True)
-        self.test.output_dir.mkdir(parents=True, exist_ok=True)
-        self.log.file_path.parent.mkdir(parents=True, exist_ok=True)
-
-        # 初始化数据库配置
-        if not self.database:
-            self.database = DatabaseSettings()
+        if hasattr(self.test, "output_dir"):
+            self.test.output_dir.mkdir(parents=True, exist_ok=True)
+        if hasattr(self.log, "file_path"):
+            self.log.file_path.parent.mkdir(parents=True, exist_ok=True)
 
     model_config = {
         "env_file": ".env",
@@ -196,7 +194,7 @@ def validate_settings() -> bool:
     """验证配置是否正确"""
     try:
         # 验证必需的配置项
-        if settings.llm.openai_api_key:
+        if hasattr(settings.llm, "openai_api_key") and settings.llm.openai_api_key:
             assert settings.llm.openai_api_key.strip(), "OpenAI API Key cannot be empty"
         assert settings.secret_key, "Secret key is required"
 

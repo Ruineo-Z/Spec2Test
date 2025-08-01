@@ -5,16 +5,22 @@
 
 from fastapi import APIRouter
 
-from app.api.v1.endpoints import executor, generator, parser, reporter
+from app.api.v1.endpoints import analyses, documents, executor, generator, reporter
 
 # 创建API路由器
 api_router = APIRouter()
 
 # 包含各个模块的路由
 api_router.include_router(
-    parser.router,
-    prefix="/parser",
-    tags=["Document Parser"],
+    documents.router,
+    prefix="/documents",
+    tags=["Document Management"],
+)
+
+api_router.include_router(
+    analyses.router,
+    prefix="/analyses",
+    tags=["Document Analysis"],
 )
 
 api_router.include_router(
@@ -48,7 +54,8 @@ async def api_info():
         "version": "v1",
         "description": "Spec2Test API v1 - AI驱动的自动化测试流水线",
         "endpoints": {
-            "parser": "文档解析和质量分析",
+            "documents": "文档上传和管理",
+            "analyses": "AI驱动的文档质量分析",
             "generator": "AI测试用例和代码生成",
             "executor": "测试执行和结果收集",
             "reporter": "测试报告生成和AI分析",

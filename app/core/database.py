@@ -38,8 +38,18 @@ def get_database_url(async_mode: bool = False) -> str:
     Returns:
         数据库连接URL
     """
-    # settings已经在模块顶部导入
+    import os
 
+    # 优先检查DATABASE_URL环境变量
+    database_url = os.getenv("DATABASE_URL")
+    if database_url:
+        if async_mode and "postgresql://" in database_url:
+            return database_url.replace("postgresql://", "postgresql+asyncpg://")
+        elif async_mode and "sqlite://" in database_url:
+            return database_url.replace("sqlite://", "sqlite+aiosqlite://")
+        return database_url
+
+    # settings已经在模块顶部导入
     if not settings.database:
         raise ConfigurationError("数据库配置未设置")
 
@@ -110,8 +120,16 @@ def init_database():
             async_engine, class_=AsyncSession, expire_on_commit=False
         )
 
+        # 从实际的URL判断数据库类型
+        db_type = "sqlite"
+        if "postgresql" in sync_url:
+            db_type = "postgresql"
+        elif "mysql" in sync_url:
+            db_type = "mysql"
+
+        logger.info(f"数据库连接初始化成功: {db_type}")
         logger.info(
-            f"数据库连接初始化成功: {settings.database.driver if settings.database else 'sqlite'}"
+            f"数据库连接URL: {sync_url.split('@')[0] if '@' in sync_url else sync_url}"
         )
 
     except Exception as e:

@@ -25,7 +25,7 @@ COPY . .
 
 # 安装Python依赖
 RUN pip install --upgrade pip && \
-    pip install -e .
+    pip install -e .[database,production]
 
 # 创建非root用户
 RUN useradd --create-home --shell /bin/bash app && \

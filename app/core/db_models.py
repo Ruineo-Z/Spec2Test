@@ -46,8 +46,10 @@ class DocumentModel(Base):
     suggestions = Column(JSON)  # 改进建议列表
 
     # 时间戳
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    created_at = Column(
+        DateTime(timezone=True), server_default=func.current_timestamp()
+    )
+    updated_at = Column(DateTime(timezone=True), onupdate=func.current_timestamp())
     analyzed_at = Column(DateTime(timezone=True))
 
     # 关系
@@ -99,8 +101,10 @@ class EndpointModel(Base):
     deprecated = Column(Boolean, default=False)
 
     # 时间戳
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    created_at = Column(
+        DateTime(timezone=True), server_default=func.current_timestamp()
+    )
+    updated_at = Column(DateTime(timezone=True), onupdate=func.current_timestamp())
 
     # 关系
     document = relationship("DocumentModel", back_populates="endpoints")
@@ -113,6 +117,41 @@ class EndpointModel(Base):
         UniqueConstraint(
             "document_id", "path", "method", name="uq_endpoint_path_method"
         ),
+    )
+
+
+class AnalysisModel(Base):
+    """分析记录模型"""
+
+    __tablename__ = "analyses"
+
+    id = Column(Integer, primary_key=True, index=True)
+    document_id = Column(Integer, ForeignKey("documents.id"), nullable=False)
+
+    # 分析类型和状态
+    analysis_type = Column(String(50), nullable=False)  # quick, detailed, comprehensive
+    status = Column(
+        String(50), default="pending"
+    )  # pending, running, completed, failed
+
+    # 分析结果
+    quality_score = Column(Float, default=0.0)
+    analysis_result = Column(JSON)  # 完整的分析结果
+
+    # 时间戳
+    created_at = Column(
+        DateTime(timezone=True), server_default=func.current_timestamp()
+    )
+    updated_at = Column(DateTime(timezone=True), onupdate=func.current_timestamp())
+    completed_at = Column(DateTime(timezone=True))
+
+    # 关系
+    document = relationship("DocumentModel")
+
+    # 索引
+    __table_args__ = (
+        Index("idx_analysis_document", "document_id"),
+        Index("idx_analysis_type_status", "analysis_type", "status"),
     )
 
 
@@ -143,8 +182,10 @@ class TestSuiteModel(Base):
     tags = Column(JSON)
 
     # 时间戳
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    created_at = Column(
+        DateTime(timezone=True), server_default=func.current_timestamp()
+    )
+    updated_at = Column(DateTime(timezone=True), onupdate=func.current_timestamp())
 
     # 关系
     document = relationship("DocumentModel", back_populates="test_suites")
@@ -190,8 +231,10 @@ class TestCaseModel(Base):
     tags = Column(JSON)
 
     # 时间戳
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    created_at = Column(
+        DateTime(timezone=True), server_default=func.current_timestamp()
+    )
+    updated_at = Column(DateTime(timezone=True), onupdate=func.current_timestamp())
 
     # 关系
     test_suite = relationship("TestSuiteModel", back_populates="test_cases")
@@ -247,7 +290,9 @@ class TestResultModel(Base):
     logs = Column(JSON)  # 日志信息列表
 
     # 时间戳
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(
+        DateTime(timezone=True), server_default=func.current_timestamp()
+    )
 
     # 关系
     test_case = relationship("TestCaseModel", back_populates="test_results")
@@ -306,7 +351,9 @@ class TestReportModel(Base):
     tags = Column(JSON)
 
     # 时间戳
-    generated_at = Column(DateTime(timezone=True), server_default=func.now())
+    generated_at = Column(
+        DateTime(timezone=True), server_default=func.current_timestamp()
+    )
 
     # 关系
     test_suite = relationship("TestSuiteModel", back_populates="test_reports")
@@ -353,7 +400,9 @@ class ExecutionHistoryModel(Base):
     error_details = Column(JSON)
 
     # 时间戳
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(
+        DateTime(timezone=True), server_default=func.current_timestamp()
+    )
 
     # 索引
     __table_args__ = (
@@ -366,6 +415,7 @@ class ExecutionHistoryModel(Base):
 # 导出所有模型
 __all__ = [
     "DocumentModel",
+    "AnalysisModel",
     "EndpointModel",
     "TestSuiteModel",
     "TestCaseModel",

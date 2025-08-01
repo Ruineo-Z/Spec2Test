@@ -4,63 +4,78 @@
   "metadata": {
     "version": "2.0.0",
     "description": "project 级资源注册表",
-    "createdAt": "2025-07-30T13:09:28.786Z",
-    "updatedAt": "2025-07-30T13:09:28.790Z",
-    "resourceCount": 3
+    "createdAt": "2025-08-01T02:44:04.698Z",
+    "updatedAt": "2025-08-01T02:44:04.701Z",
+    "resourceCount": 4
   },
   "resources": [
     {
-      "id": "tdd-development-flow",
+      "id": "python-development-principles",
       "source": "project",
       "protocol": "execution",
-      "name": "Tdd Development Flow 执行模式",
+      "name": "Python Development Principles 执行模式",
       "description": "执行模式，定义具体的行为模式",
-      "reference": "@project://.promptx/resource/role/python-tdd-expert/execution/tdd-development-flow.execution.md",
+      "reference": "@project://.promptx/resource/role/python-expert/execution/python-development-principles.execution.md",
       "metadata": {
-        "createdAt": "2025-07-30T13:09:28.788Z",
-        "updatedAt": "2025-07-30T13:09:28.788Z",
-        "scannedAt": "2025-07-30T13:09:28.788Z",
-        "path": "role/python-tdd-expert/execution/tdd-development-flow.execution.md"
+        "createdAt": "2025-08-01T02:44:04.700Z",
+        "updatedAt": "2025-08-01T02:44:04.700Z",
+        "scannedAt": "2025-08-01T02:44:04.700Z",
+        "path": "role/python-expert/execution/python-development-principles.execution.md"
       }
     },
     {
-      "id": "python-tdd-expert",
+      "id": "python-tech-stack",
+      "source": "project",
+      "protocol": "knowledge",
+      "name": "Python Tech Stack 知识库",
+      "description": "知识库，提供专业知识和信息",
+      "reference": "@project://.promptx/resource/role/python-expert/knowledge/python-tech-stack.knowledge.md",
+      "metadata": {
+        "createdAt": "2025-08-01T02:44:04.700Z",
+        "updatedAt": "2025-08-01T02:44:04.700Z",
+        "scannedAt": "2025-08-01T02:44:04.700Z",
+        "path": "role/python-expert/knowledge/python-tech-stack.knowledge.md"
+      }
+    },
+    {
+      "id": "python-expert",
       "source": "project",
       "protocol": "role",
-      "name": "Python Tdd Expert 角色",
+      "name": "Python Expert 角色",
       "description": "专业角色，提供特定领域的专业能力",
-      "reference": "@project://.promptx/resource/role/python-tdd-expert/python-tdd-expert.role.md",
+      "reference": "@project://.promptx/resource/role/python-expert/python-expert.role.md",
       "metadata": {
-        "createdAt": "2025-07-30T13:09:28.788Z",
-        "updatedAt": "2025-07-30T13:09:28.788Z",
-        "scannedAt": "2025-07-30T13:09:28.788Z",
-        "path": "role/python-tdd-expert/python-tdd-expert.role.md"
+        "createdAt": "2025-08-01T02:44:04.701Z",
+        "updatedAt": "2025-08-01T02:44:04.701Z",
+        "scannedAt": "2025-08-01T02:44:04.701Z",
+        "path": "role/python-expert/python-expert.role.md"
       }
     },
     {
-      "id": "python-modern-stack",
+      "id": "python-expert-thinking",
       "source": "project",
       "protocol": "thought",
-      "name": "Python Modern Stack 思维模式",
+      "name": "Python Expert Thinking 思维模式",
       "description": "思维模式，指导AI的思考方式",
-      "reference": "@project://.promptx/resource/role/python-tdd-expert/thought/python-modern-stack.thought.md",
+      "reference": "@project://.promptx/resource/role/python-expert/thought/python-expert-thinking.thought.md",
       "metadata": {
-        "createdAt": "2025-07-30T13:09:28.789Z",
-        "updatedAt": "2025-07-30T13:09:28.789Z",
-        "scannedAt": "2025-07-30T13:09:28.789Z",
-        "path": "role/python-tdd-expert/thought/python-modern-stack.thought.md"
+        "createdAt": "2025-08-01T02:44:04.701Z",
+        "updatedAt": "2025-08-01T02:44:04.701Z",
+        "scannedAt": "2025-08-01T02:44:04.701Z",
+        "path": "role/python-expert/thought/python-expert-thinking.thought.md"
       }
     }
   ],
   "stats": {
-    "totalResources": 3,
+    "totalResources": 4,
     "byProtocol": {
       "execution": 1,
+      "knowledge": 1,
       "role": 1,
       "thought": 1
     },
     "bySource": {
-      "project": 3
+      "project": 4
     }
   }
 }

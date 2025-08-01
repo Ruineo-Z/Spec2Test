@@ -3,11 +3,14 @@
 AI驱动的自动化测试流水线主应用。
 """
 
+import os
 import time
 from contextlib import asynccontextmanager
+from pathlib import Path
 from typing import Any, Dict
 
 import uvicorn
+from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
@@ -18,6 +21,19 @@ from app.config.settings import settings, validate_settings
 from app.core.database import database_lifespan
 from app.utils.exceptions import Spec2TestException
 from app.utils.logger import get_logger, log_api_request, setup_logger
+
+# 加载.env文件
+env_path = Path(__file__).parent.parent / ".env"
+if env_path.exists():
+    load_dotenv(env_path)
+    print(f"✅ 已加载环境变量文件: {env_path}")
+    # 验证关键环境变量
+    if os.getenv("GEMINI_API_KEY"):
+        print(f"✅ GEMINI_API_KEY已设置")
+    else:
+        print(f"⚠️  GEMINI_API_KEY未设置")
+else:
+    print(f"⚠️  环境变量文件不存在: {env_path}")
 
 # 设置日志
 setup_logger()
