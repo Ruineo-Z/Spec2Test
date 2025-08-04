@@ -5,7 +5,7 @@
 
 from fastapi import APIRouter
 
-from app.api.v1.endpoints import analyses, documents, executor, generator, reporter
+from app.api.v1.endpoints import analyses, documents
 
 # 创建API路由器
 api_router = APIRouter()
@@ -23,23 +23,18 @@ api_router.include_router(
     tags=["Document Analysis"],
 )
 
-api_router.include_router(
-    generator.router,
-    prefix="/generator",
-    tags=["Test Generator"],
-)
-
-api_router.include_router(
-    executor.router,
-    prefix="/executor",
-    tags=["Test Executor"],
-)
-
-api_router.include_router(
-    reporter.router,
-    prefix="/reporter",
-    tags=["Test Reporter"],
-)
+# TODO: 未来实现的端点
+# api_router.include_router(
+#     test_cases.router,
+#     prefix="/test-cases",
+#     tags=["Test Case Generation"],
+# )
+#
+# api_router.include_router(
+#     test_code.router,
+#     prefix="/test-code",
+#     tags=["Test Code Generation"],
+# )
 
 
 # API信息接口
@@ -56,9 +51,6 @@ async def api_info():
         "endpoints": {
             "documents": "文档上传和管理",
             "analyses": "AI驱动的文档质量分析",
-            "generator": "AI测试用例和代码生成",
-            "executor": "测试执行和结果收集",
-            "reporter": "测试报告生成和AI分析",
         },
         "features": [
             "OpenAPI 3.0文档解析",

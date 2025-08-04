@@ -45,22 +45,14 @@ def get_database_url(async_mode: bool = False) -> str:
     if database_url:
         if async_mode and "postgresql://" in database_url:
             return database_url.replace("postgresql://", "postgresql+asyncpg://")
-        elif async_mode and "sqlite://" in database_url:
-            return database_url.replace("sqlite://", "sqlite+aiosqlite://")
         return database_url
 
     # settings已经在模块顶部导入
     if not settings.database:
         raise ConfigurationError("数据库配置未设置")
 
-    # 构建基础URL
-    if settings.database.driver == "sqlite":
-        if async_mode:
-            return f"sqlite+aiosqlite:///{settings.database.name}"
-        else:
-            return f"sqlite:///{settings.database.name}"
-
-    elif settings.database.driver == "postgresql":
+    # 构建基础URL - 只支持PostgreSQL
+    if settings.database.driver == "postgresql":
         base_url = (
             f"{settings.database.user}:{settings.database.password}"
             f"@{settings.database.host}:{settings.database.port}"
@@ -85,7 +77,7 @@ def get_database_url(async_mode: bool = False) -> str:
             return f"mysql+pymysql://{base_url}"
 
     else:
-        raise ConfigurationError(f"不支持的数据库驱动: {settings.database.driver}")
+        raise ConfigurationError(f"不支持的数据库驱动: {settings.database.driver}。只支持PostgreSQL。")
 
 
 def init_database():
@@ -120,12 +112,10 @@ def init_database():
             async_engine, class_=AsyncSession, expire_on_commit=False
         )
 
-        # 从实际的URL判断数据库类型
-        db_type = "sqlite"
-        if "postgresql" in sync_url:
-            db_type = "postgresql"
-        elif "mysql" in sync_url:
-            db_type = "mysql"
+        # 从实际的URL判断数据库类型 - 只支持PostgreSQL
+        db_type = "postgresql"
+        if "postgresql" not in sync_url:
+            raise ConfigurationError("只支持PostgreSQL数据库")
 
         logger.info(f"数据库连接初始化成功: {db_type}")
         logger.info(

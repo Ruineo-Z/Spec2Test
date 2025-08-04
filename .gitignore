@@ -283,3 +283,52 @@ docs/site/
 # Alembic migration backups
 alembic/versions/*.backup
 alembic/versions/*.bak
+
+# Additional project-specific exclusions
+# Only keep functional code and Docker-related files
+*.md.backup
+*.md.tmp
+test_*.py.backup
+scripts/test_*.py
+scripts/*_test.py
+scripts/temp_*
+scripts/backup_*
+
+# Exclude development and testing artifacts
+dev_*
+temp_*
+backup_*
+old_*
+deprecated_*
+unused_*
+
+# Exclude non-essential documentation
+docs/temp/
+docs/backup/
+docs/old/
+docs/deprecated/
+
+# Exclude test artifacts and temporary outputs
+test_results/
+test_artifacts/
+*.test.json
+*.test.yaml
+*.test.xml
+
+# Exclude development databases and backups
+*.db.backup
+*.db.old
+*.sqlite.backup
+*.sqlite.old
+
+# Exclude IDE and editor specific files
+.vscode/settings.json
+.vscode/launch.json
+.vscode/tasks.json
+*.code-workspace
+
+# Exclude development logs and debug files
+debug.log
+dev.log
+local.log
+*.debug

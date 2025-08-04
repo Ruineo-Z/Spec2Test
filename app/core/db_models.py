@@ -46,10 +46,8 @@ class DocumentModel(Base):
     suggestions = Column(JSON)  # 改进建议列表
 
     # 时间戳
-    created_at = Column(
-        DateTime(timezone=True), server_default=func.current_timestamp()
-    )
-    updated_at = Column(DateTime(timezone=True), onupdate=func.current_timestamp())
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     analyzed_at = Column(DateTime(timezone=True))
 
     # 关系
@@ -101,10 +99,8 @@ class EndpointModel(Base):
     deprecated = Column(Boolean, default=False)
 
     # 时间戳
-    created_at = Column(
-        DateTime(timezone=True), server_default=func.current_timestamp()
-    )
-    updated_at = Column(DateTime(timezone=True), onupdate=func.current_timestamp())
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # 关系
     document = relationship("DocumentModel", back_populates="endpoints")
@@ -139,10 +135,8 @@ class AnalysisModel(Base):
     analysis_result = Column(JSON)  # 完整的分析结果
 
     # 时间戳
-    created_at = Column(
-        DateTime(timezone=True), server_default=func.current_timestamp()
-    )
-    updated_at = Column(DateTime(timezone=True), onupdate=func.current_timestamp())
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     completed_at = Column(DateTime(timezone=True))
 
     # 关系
@@ -182,10 +176,8 @@ class TestSuiteModel(Base):
     tags = Column(JSON)
 
     # 时间戳
-    created_at = Column(
-        DateTime(timezone=True), server_default=func.current_timestamp()
-    )
-    updated_at = Column(DateTime(timezone=True), onupdate=func.current_timestamp())
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # 关系
     document = relationship("DocumentModel", back_populates="test_suites")
@@ -231,10 +223,8 @@ class TestCaseModel(Base):
     tags = Column(JSON)
 
     # 时间戳
-    created_at = Column(
-        DateTime(timezone=True), server_default=func.current_timestamp()
-    )
-    updated_at = Column(DateTime(timezone=True), onupdate=func.current_timestamp())
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # 关系
     test_suite = relationship("TestSuiteModel", back_populates="test_cases")
@@ -290,9 +280,7 @@ class TestResultModel(Base):
     logs = Column(JSON)  # 日志信息列表
 
     # 时间戳
-    created_at = Column(
-        DateTime(timezone=True), server_default=func.current_timestamp()
-    )
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     # 关系
     test_case = relationship("TestCaseModel", back_populates="test_results")
@@ -351,9 +339,7 @@ class TestReportModel(Base):
     tags = Column(JSON)
 
     # 时间戳
-    generated_at = Column(
-        DateTime(timezone=True), server_default=func.current_timestamp()
-    )
+    generated_at = Column(DateTime(timezone=True), server_default=func.now())
 
     # 关系
     test_suite = relationship("TestSuiteModel", back_populates="test_reports")
@@ -400,9 +386,7 @@ class ExecutionHistoryModel(Base):
     error_details = Column(JSON)
 
     # 时间戳
-    created_at = Column(
-        DateTime(timezone=True), server_default=func.current_timestamp()
-    )
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     # 索引
     __table_args__ = (
