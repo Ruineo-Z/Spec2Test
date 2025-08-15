@@ -74,7 +74,7 @@ class HTTPClient:
                 - verify_ssl: 是否验证SSL证书 (默认: True)
                 - user_agent: 用户代理 (默认: Spec2Test-HTTPClient/1.0)
         """
-        self.base_url = base_url.rstrip('/')
+        self.base_url = base_url.rstrip('/') if base_url else None
         self.config = config or {}
         
         # 配置参数
