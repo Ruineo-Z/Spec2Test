@@ -1,30 +1,29 @@
-"""Alembic环境配置
-
-数据库迁移环境配置文件。
-"""
-
-import os
 import sys
+import os
 from logging.config import fileConfig
-from pathlib import Path
 
-from sqlalchemy import engine_from_config, pool
+from sqlalchemy import engine_from_config
+from sqlalchemy import pool
 
 from alembic import context
 
 # 添加项目根目录到Python路径
-project_root = Path(__file__).parent.parent
-sys.path.insert(0, str(project_root))
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
-from app.config.settings import settings
+# 导入应用配置和模型
+from app.config import get_settings
+from app.models.base import BaseModel
 
-# 导入模型和配置
-from app.core.database import Base, get_database_url
-from app.core.db_models import *  # 导入所有模型
+# 导入所有模型以确保它们被注册到metadata中
+from app.models import Document, TestCase, TestResult, Report
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
+
+# 从应用配置获取数据库URL
+settings = get_settings()
+config.set_main_option("sqlalchemy.url", settings.database.url)
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
@@ -33,27 +32,12 @@ if config.config_file_name is not None:
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-target_metadata = Base.metadata
+target_metadata = BaseModel.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
-
-
-def get_url():
-    """获取数据库URL"""
-    try:
-        # 尝试从环境变量获取
-        url = os.getenv("DATABASE_URL")
-        if url:
-            return url
-
-        # 从配置获取
-        return get_database_url(async_mode=False)
-    except Exception:
-        # 默认使用SQLite
-        return "sqlite:///spec2test.db"
 
 
 def run_migrations_offline() -> None:
@@ -68,14 +52,12 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = get_url()
+    url = config.get_main_option("sqlalchemy.url")
     context.configure(
         url=url,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
-        compare_type=True,
-        compare_server_default=True,
     )
 
     with context.begin_transaction():
@@ -89,22 +71,15 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
-    # 设置数据库URL
-    configuration = config.get_section(config.config_ini_section)
-    configuration["sqlalchemy.url"] = get_url()
-
     connectable = engine_from_config(
-        configuration,
+        config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
 
     with connectable.connect() as connection:
         context.configure(
-            connection=connection,
-            target_metadata=target_metadata,
-            compare_type=True,
-            compare_server_default=True,
+            connection=connection, target_metadata=target_metadata
         )
 
         with context.begin_transaction():

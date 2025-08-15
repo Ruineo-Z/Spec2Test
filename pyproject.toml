@@ -1,164 +1,114 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [project]
-name = "spec2test"
+name = "spec2test-backend"
 version = "0.1.0"
-description = "AI-driven automated testing pipeline from API specs to test reports"
+description = "AI-powered API documentation testing tool backend"
+readme = "README.md"
+license = {file = "LICENSE"}
 authors = [
     {name = "Sean", email = "sean@deepractice.ai"}
 ]
-readme = "README.md"
-requires-python = ">=3.9"
+keywords = ["api", "testing", "documentation", "openapi", "llm"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Testing",
+    "Topic :: Software Development :: Documentation",
 ]
-
-# 核心依赖
+requires-python = ">=3.11"
 dependencies = [
-    # Web框架
+    # Web Framework
     "fastapi>=0.104.0",
     "uvicorn[standard]>=0.24.0",
-    "python-multipart>=0.0.6",
-
-    # 数据处理
-    "pydantic>=2.5.0",
-    "pydantic-settings>=2.0.0",
-
-    # HTTP客户端
-    "httpx>=0.25.0",
-    "requests>=2.31.0",
-
-    # 测试框架
-    "pytest>=7.4.0",
-    "pytest-asyncio>=0.21.0",
-
-    # 模板引擎
-    "jinja2>=3.1.0",
-
-    # 配置文件
-    "pyyaml>=6.0",
-    "python-dotenv>=1.0.0",
-
-    # 命令行工具
-    "click>=8.1.0",
-    "typer>=0.9.0",
-
-    # AI/LLM集成
-    "openai>=1.3.0",
-    "langchain>=0.0.350",
-    "langchain-openai>=0.0.2",
-    "tiktoken>=0.5.0",
-
-    # 日志系统
-    "loguru>=0.7.0",
-
-    # 实用工具
-    "rich>=13.7.0",
-    "watchdog>=3.0.0",
-
-    # 数据库
+    
+    # Database
     "sqlalchemy>=2.0.0",
-    "aiosqlite>=0.19.0",
     "alembic>=1.12.0",
+    "psycopg2-binary>=2.9.0",
+    
+    # Data Validation
+    "pydantic>=2.5.0",
+    "pydantic-settings>=2.1.0",
+    
+    # Async Tasks
+    "celery>=5.3.0",
+    "redis>=5.0.0",
+    
+    # LLM Integration
+    "google-generativeai>=0.3.0",
+    "openai>=1.0.0",
+    "httpx>=0.25.0",
+    
+    # Document Processing
+    "pyyaml>=6.0",
+    "markdown>=3.5.0",
+    "jsonschema>=4.20.0",
+    
+    # Utilities
+    "loguru>=0.7.0",
+    "python-multipart>=0.0.6",
+    "python-jose[cryptography]>=3.3.0",
+    "passlib[bcrypt]>=1.7.4",
 ]
 
-# 可选依赖组
 [project.optional-dependencies]
-# 开发依赖
 dev = [
+    # Testing
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.1.0",
+    "httpx>=0.25.0",
+    
+    # Code Quality
     "black>=23.0.0",
     "isort>=5.12.0",
     "flake8>=6.0.0",
     "mypy>=1.7.0",
+    
+    # Development Tools
     "pre-commit>=3.5.0",
-    "pytest-cov>=4.1.0",
-    "pytest-mock>=3.12.0",
-]
-
-# 测试报告依赖
-reporting = [
-    "pytest-html>=4.1.0",
-    "allure-pytest>=2.13.0",
-    "requests-mock>=1.11.0",
-]
-
-# 数据库依赖
-database = [
-    "sqlalchemy>=2.0.0",
-    "alembic>=1.13.0",
-    "asyncpg>=0.29.0",  # PostgreSQL异步驱动
-    "psycopg2-binary>=2.9.0",  # PostgreSQL同步驱动
-    "redis>=5.0.0",
-]
-
-# 生产部署依赖
-production = [
-    "gunicorn>=21.2.0",
-    "prometheus-client>=0.19.0",
-]
-
-# 完整安装
-all = [
-    "spec2test[dev,reporting,database,production]"
+    "watchfiles>=0.21.0",
 ]
 
 [project.urls]
 Homepage = "https://github.com/deepractice-ai/spec2test"
-Repository = "https://github.com/deepractice-ai/spec2test.git"
-Documentation = "https://spec2test.readthedocs.io"
-"Bug Tracker" = "https://github.com/deepractice-ai/spec2test/issues"
+Repository = "https://github.com/deepractice-ai/spec2test"
+Documentation = "https://spec2test.deepractice.ai"
+Issues = "https://github.com/deepractice-ai/spec2test/issues"
 
-[project.scripts]
-spec2test = "app.cli:main"
-
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
-[tool.hatch.build.targets.wheel]
-packages = ["app"]
-
-# Black代码格式化配置
 [tool.black]
 line-length = 88
-target-version = ['py312']
+target-version = ['py311']
 include = '\.pyi?$'
 extend-exclude = '''
-(
-  /(
-      \.eggs
-    | \.git
-    | \.hg
-    | \.mypy_cache
-    | \.tox
-    | \.venv
-    | _build
-    | buck-out
-    | build
-    | dist
-    | migrations
-  )/
-)'''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
 
-# isort导入排序配置
 [tool.isort]
 profile = "black"
-line_length = 88
 multi_line_output = 3
-include_trailing_comma = true
-force_grid_wrap = 0
-use_parentheses = true
-ensure_newline_before_comments = true
-skip_glob = ["migrations/*"]
+line_length = 88
+known_first_party = ["app"]
 
-# MyPy类型检查配置
 [tool.mypy]
-python_version = "3.9"
+python_version = "3.11"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
@@ -174,43 +124,31 @@ strict_equality = true
 
 [[tool.mypy.overrides]]
 module = [
-    "openai.*",
-    "langchain.*",
-    "tiktoken.*",
+    "celery.*",
+    "redis.*",
+    "google.generativeai.*",
 ]
 ignore_missing_imports = true
 
-# Pytest配置
 [tool.pytest.ini_options]
 minversion = "7.0"
 addopts = "-ra -q --strict-markers --strict-config"
-testpaths = [
-    "tests",
-]
-python_files = [
-    "test_*.py",
-    "*_test.py",
-]
-python_classes = [
-    "Test*",
-]
-python_functions = [
-    "test_*",
-]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
 markers = [
-    "slow: marks tests as slow (deselect with '-m 'not slow'')",
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
     "integration: marks tests as integration tests",
     "unit: marks tests as unit tests",
 ]
 
-# Coverage配置
 [tool.coverage.run]
 source = ["app"]
 omit = [
-    "*/migrations/*",
-    "*/venv/*",
     "*/tests/*",
-    "*/conftest.py",
+    "*/venv/*",
+    "*/__pycache__/*",
 ]
 
 [tool.coverage.report]
@@ -221,6 +159,3 @@ exclude_lines = [
     "raise NotImplementedError",
     "if __name__ == .__main__.:",
 ]
-
-[tool.coverage.html]
-directory = "htmlcov"

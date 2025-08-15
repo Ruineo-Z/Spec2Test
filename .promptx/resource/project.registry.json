@@ -4,78 +4,92 @@
   "metadata": {
     "version": "2.0.0",
     "description": "project 级资源注册表",
-    "createdAt": "2025-08-01T02:44:04.698Z",
-    "updatedAt": "2025-08-01T02:44:04.701Z",
-    "resourceCount": 4
+    "createdAt": "2025-08-14T09:42:51.640Z",
+    "updatedAt": "2025-08-14T09:42:51.656Z",
+    "resourceCount": 5
   },
   "resources": [
     {
-      "id": "python-development-principles",
+      "id": "development-result-template",
       "source": "project",
       "protocol": "execution",
-      "name": "Python Development Principles 执行模式",
+      "name": "Development Result Template 执行模式",
       "description": "执行模式，定义具体的行为模式",
-      "reference": "@project://.promptx/resource/role/python-expert/execution/python-development-principles.execution.md",
+      "reference": "@project://.promptx/resource/role/spec2test-python-expert/execution/development-result-template.execution.md",
       "metadata": {
-        "createdAt": "2025-08-01T02:44:04.700Z",
-        "updatedAt": "2025-08-01T02:44:04.700Z",
-        "scannedAt": "2025-08-01T02:44:04.700Z",
-        "path": "role/python-expert/execution/python-development-principles.execution.md"
+        "createdAt": "2025-08-14T09:42:51.646Z",
+        "updatedAt": "2025-08-14T09:42:51.646Z",
+        "scannedAt": "2025-08-14T09:42:51.646Z",
+        "path": "role/spec2test-python-expert/execution/development-result-template.execution.md"
       }
     },
     {
-      "id": "python-tech-stack",
+      "id": "spec2test-development-workflow",
+      "source": "project",
+      "protocol": "execution",
+      "name": "Spec2test Development Workflow 执行模式",
+      "description": "执行模式，定义具体的行为模式",
+      "reference": "@project://.promptx/resource/role/spec2test-python-expert/execution/spec2test-development-workflow.execution.md",
+      "metadata": {
+        "createdAt": "2025-08-14T09:42:51.647Z",
+        "updatedAt": "2025-08-14T09:42:51.647Z",
+        "scannedAt": "2025-08-14T09:42:51.647Z",
+        "path": "role/spec2test-python-expert/execution/spec2test-development-workflow.execution.md"
+      }
+    },
+    {
+      "id": "spec2test-technical-stack",
       "source": "project",
       "protocol": "knowledge",
-      "name": "Python Tech Stack 知识库",
+      "name": "Spec2test Technical Stack 知识库",
       "description": "知识库，提供专业知识和信息",
-      "reference": "@project://.promptx/resource/role/python-expert/knowledge/python-tech-stack.knowledge.md",
+      "reference": "@project://.promptx/resource/role/spec2test-python-expert/knowledge/spec2test-technical-stack.knowledge.md",
       "metadata": {
-        "createdAt": "2025-08-01T02:44:04.700Z",
-        "updatedAt": "2025-08-01T02:44:04.700Z",
-        "scannedAt": "2025-08-01T02:44:04.700Z",
-        "path": "role/python-expert/knowledge/python-tech-stack.knowledge.md"
+        "createdAt": "2025-08-14T09:42:51.651Z",
+        "updatedAt": "2025-08-14T09:42:51.651Z",
+        "scannedAt": "2025-08-14T09:42:51.651Z",
+        "path": "role/spec2test-python-expert/knowledge/spec2test-technical-stack.knowledge.md"
       }
     },
     {
-      "id": "python-expert",
+      "id": "spec2test-python-expert",
       "source": "project",
       "protocol": "role",
-      "name": "Python Expert 角色",
+      "name": "Spec2test Python Expert 角色",
       "description": "专业角色，提供特定领域的专业能力",
-      "reference": "@project://.promptx/resource/role/python-expert/python-expert.role.md",
+      "reference": "@project://.promptx/resource/role/spec2test-python-expert/spec2test-python-expert.role.md",
       "metadata": {
-        "createdAt": "2025-08-01T02:44:04.701Z",
-        "updatedAt": "2025-08-01T02:44:04.701Z",
-        "scannedAt": "2025-08-01T02:44:04.701Z",
-        "path": "role/python-expert/python-expert.role.md"
+        "createdAt": "2025-08-14T09:42:51.655Z",
+        "updatedAt": "2025-08-14T09:42:51.655Z",
+        "scannedAt": "2025-08-14T09:42:51.655Z",
+        "path": "role/spec2test-python-expert/spec2test-python-expert.role.md"
       }
     },
     {
-      "id": "python-expert-thinking",
+      "id": "spec2test-development-thinking",
       "source": "project",
       "protocol": "thought",
-      "name": "Python Expert Thinking 思维模式",
+      "name": "Spec2test Development Thinking 思维模式",
       "description": "思维模式，指导AI的思考方式",
-      "reference": "@project://.promptx/resource/role/python-expert/thought/python-expert-thinking.thought.md",
+      "reference": "@project://.promptx/resource/role/spec2test-python-expert/thought/spec2test-development-thinking.thought.md",
       "metadata": {
-        "createdAt": "2025-08-01T02:44:04.701Z",
-        "updatedAt": "2025-08-01T02:44:04.701Z",
-        "scannedAt": "2025-08-01T02:44:04.701Z",
-        "path": "role/python-expert/thought/python-expert-thinking.thought.md"
+        "createdAt": "2025-08-14T09:42:51.656Z",
+        "updatedAt": "2025-08-14T09:42:51.656Z",
+        "scannedAt": "2025-08-14T09:42:51.656Z",
+        "path": "role/spec2test-python-expert/thought/spec2test-development-thinking.thought.md"
       }
     }
   ],
   "stats": {
-    "totalResources": 4,
+    "totalResources": 5,
     "byProtocol": {
-      "execution": 1,
+      "execution": 2,
       "knowledge": 1,
       "role": 1,
       "thought": 1
     },
     "bySource": {
-      "project": 4
+      "project": 5
     }
   }
 }

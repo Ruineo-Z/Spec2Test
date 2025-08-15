@@ -1,211 +1,203 @@
-# Spec2Test
-通过AI实现自动化测试流水线
+# Spec2Test Backend
 
-## 快速开始
+> AI-powered API documentation testing tool backend
 
-### 环境变量配置
+[![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-1. 复制环境变量模板文件：
+## 🎯 Project Overview
+
+Spec2Test is an intelligent API documentation testing tool that automatically analyzes API specifications (OpenAPI, Markdown) and generates comprehensive test cases using Large Language Models (LLMs). The backend provides robust APIs for document analysis, test generation, execution, and result reporting.
+
+## ✨ Key Features
+
+- **📄 Multi-format Document Support**: OpenAPI JSON/YAML, Markdown documentation
+- **🤖 AI-Powered Analysis**: Intelligent document parsing and quality assessment
+- **🧪 Smart Test Generation**: Automatic generation of normal, boundary, and error test cases
+- **⚡ Async Test Execution**: Concurrent test running with real-time progress tracking
+- **📊 Comprehensive Reporting**: Detailed analysis with failure patterns and improvement suggestions
+- **🔄 Dual LLM Support**: Cloud-based (Gemini) and local (Ollama) LLM integration
+- **🚀 High Performance**: Async architecture with Celery task queue
+
+## 🏗️ Architecture
+
+### 4-Layer Architecture
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    API Interface Layer                      │
+│                   (FastAPI Routes)                         │
+├─────────────────────────────────────────────────────────────┤
+│                 Core Business Modules                      │
+│  ┌─────────────┬─────────────┬─────────────┬─────────────┐  │
+│  │  Document   │    Test     │    Test     │   Report    │  │
+│  │  Analyzer   │  Generator  │  Executor   │  Analyzer   │  │
+│  └─────────────┴─────────────┴─────────────┴─────────────┘  │
+├─────────────────────────────────────────────────────────────┤
+│                  Shared Components                         │
+│        (LLM Clients, Storage, HTTP Client)                │
+├─────────────────────────────────────────────────────────────┤
+│                   Data Model Layer                         │
+│              (SQLAlchemy Models & Schemas)                │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Core Modules
+- **Document Analyzer**: Parses and validates API documentation
+- **Test Generator**: Creates comprehensive test cases using LLM
+- **Test Executor**: Runs tests against target APIs
+- **Report Analyzer**: Analyzes results and generates insights
+
+## 🛠️ Technology Stack
+
+- **Web Framework**: FastAPI 0.104+
+- **Database**: PostgreSQL with SQLAlchemy 2.0+
+- **Task Queue**: Celery with Redis
+- **LLM Integration**: Google Gemini + Ollama
+- **Data Validation**: Pydantic 2.5+
+- **Testing**: pytest with async support
+- **Code Quality**: Black, isort, flake8, mypy
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Python 3.11+
+- PostgreSQL 15+
+- Redis 7+
+- (Optional) Ollama for local LLM
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/deepractice-ai/spec2test.git
+   cd spec2test/spec2test-backend
+   ```
+
+2. **Set up virtual environment**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+3. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Configure environment**
+   ```bash
+   cp .env.example .env
+   # Edit .env with your configuration
+   ```
+
+5. **Set up database**
+   ```bash
+   # Create database and run migrations
+   alembic upgrade head
+   ```
+
+6. **Start services**
+   ```bash
+   # Start the API server
+   uvicorn app.main:app --reload
+
+   # Start Celery worker (in another terminal)
+   celery -A app.tasks.celery_app worker --loglevel=info
+   ```
+
+## 📖 API Documentation
+
+Once the server is running, visit:
+- **Interactive API Docs**: http://localhost:8000/docs
+- **ReDoc**: http://localhost:8000/redoc
+
+### Key Endpoints
+
+```
+POST   /api/v1/documents/              # Upload document
+GET    /api/v1/documents/{id}          # Get document info
+POST   /api/v1/documents/{id}/analyze  # Analyze document
+POST   /api/v1/tests/generate          # Generate test cases
+POST   /api/v1/tests/{id}/execute      # Execute tests
+GET    /api/v1/reports/{id}            # Get report
+GET    /api/v1/tasks/{task_id}         # Check task status
+```
+
+## 🧪 Testing
+
 ```bash
-cp .env.example .env
+# Run all tests
+pytest
+
+# Run with coverage
+pytest --cov=app --cov-report=html
+
+# Run specific test types
+pytest -m unit          # Unit tests only
+pytest -m integration   # Integration tests only
 ```
 
-2. 编辑 `.env` 文件，配置必要的环境变量：
+## 🔧 Development
+
+### Code Quality
 ```bash
-# LLM配置（必需）
-LLM_PROVIDER=gemini  # 或 openai
-GEMINI_API_KEY=your-gemini-api-key
-# 或
-OPENAI_API_KEY=your-openai-api-key
+# Format code
+black app tests
+isort app tests
 
-# 应用配置
-SECRET_KEY=your-secret-key
-DEBUG=true  # 开发环境
+# Lint code
+flake8 app tests
+mypy app
+
+# Pre-commit hooks
+pre-commit install
+pre-commit run --all-files
 ```
 
-3. 启动应用：
+### Database Migrations
 ```bash
-python main.py
+# Create new migration
+alembic revision --autogenerate -m "Description"
+
+# Apply migrations
+alembic upgrade head
+
+# Rollback migration
+alembic downgrade -1
 ```
 
-详细的环境变量配置说明请参考：[环境变量配置指南](docs/ENVIRONMENT_SETUP.md)
+## 📊 Monitoring
 
-## 项目结构说明
+- **Health Check**: http://localhost:8000/health
+- **Metrics**: http://localhost:9090/metrics (if enabled)
+- **Celery Monitoring**: Use Flower or Celery events
 
-### 核心必需文件/目录 ⭐
+## 🤝 Contributing
 
-这些是项目运行的核心组件，不可删除：
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-```
-app/                          # 主应用目录
-├── __init__.py              # Python包标识
-├── main.py                  # FastAPI应用入口
-├── cli.py                   # 命令行接口
-├── config/                  # 配置管理
-│   ├── __init__.py
-│   └── settings.py          # 应用设置和环境变量
-├── core/                    # 核心业务逻辑
-│   ├── __init__.py
-│   ├── models.py            # Pydantic数据模型定义
-│   ├── db_models.py         # SQLAlchemy数据库模型
-│   ├── database.py          # 数据库连接和会话管理
-│   ├── config.py            # 核心配置
-│   ├── ai_generator.py      # AI测试用例生成核心逻辑
-│   ├── prompts.py           # AI提示词模板
-│   ├── quality_control.py   # 质量控制模块
-│   └── parser/              # OpenAPI文档解析器
-├── api/                     # API路由层
-│   ├── __init__.py
-│   └── v1/                  # API版本1路由
-└── utils/                   # 工具函数
-    ├── __init__.py
-    ├── exceptions.py        # 自定义异常处理
-    ├── helpers.py           # 通用辅助函数
-    └── logger.py            # 日志配置和管理
+## 📄 License
 
-requirements.txt             # Python依赖包列表
-pyproject.toml              # 项目配置和依赖管理
-main.py                     # 项目启动入口文件
-```
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-### 开发工具文件 🔧
+## 🙏 Acknowledgments
 
-这些文件用于开发环境配置和代码质量控制，可根据需要保留：
+- [FastAPI](https://fastapi.tiangolo.com/) for the excellent web framework
+- [SQLAlchemy](https://www.sqlalchemy.org/) for powerful ORM capabilities
+- [Celery](https://docs.celeryq.dev/) for distributed task processing
+- [Google Gemini](https://ai.google.dev/) for advanced LLM capabilities
 
-#### 代码质量检查配置
-```
-.pre-commit-config.yaml     # Git提交前自动检查配置
-.flake8                     # Python代码风格检查配置（PEP8）
-.bandit                     # Python安全漏洞扫描配置
-mypy.ini                    # Python静态类型检查配置
-pytest.ini                  # 单元测试框架配置
-```
+## 📞 Support
 
-#### Docker容器化配置
-```
-.dockerignore              # Docker构建时忽略文件
-Dockerfile                 # Docker镜像构建配置
-docker-compose.yml         # Docker多容器编排配置
-```
+- **Documentation**: [https://spec2test.deepractice.ai](https://spec2test.deepractice.ai)
+- **Issues**: [GitHub Issues](https://github.com/deepractice-ai/spec2test/issues)
+- **Email**: support@deepractice.ai
 
-#### 项目配置文件
-```
-pyproject.toml             # 现代Python项目配置（依赖、构建、工具配置）
-requirements.txt           # Python依赖包列表
-```
+---
 
-### 数据库相关 🗄️
-
-数据库迁移和管理文件：
-
-```
-alembic.ini                # 数据库迁移配置
-alembic/                   # 数据库迁移脚本
-spec2test.db              # SQLite数据库文件（生产环境可删除）
-```
-
-### 测试相关 🧪
-
-测试代码和测试数据：
-
-```
-tests/                     # 测试代码
-├── __init__.py
-├── conftest.py           # 测试配置
-├── fixtures/             # 测试数据
-└── unit/                 # 单元测试
-```
-
-### 脚本工具 📜
-
-开发和部署辅助脚本：
-
-#### 开发环境管理脚本
-```
-scripts/
-├── start-dev.sh              # 启动开发环境服务器
-├── start-local-dev.sh        # 启动本地开发环境
-├── stop-dev.sh               # 停止开发环境服务器
-└── init-db.sql               # 数据库初始化SQL脚本
-```
-
-#### 代码质量和验证脚本
-```
-├── quality-check.sh          # 运行所有代码质量检查
-├── format-code.sh            # 自动格式化代码
-├── api-validation.py         # API接口验证脚本
-├── quick-validation.sh       # 快速验证脚本
-├── quick-verify.sh           # 快速验证检查
-├── comprehensive-validation.sh # 全面验证检查
-└── verify-setup.sh           # 验证环境设置
-```
-
-#### 测试相关脚本
-```
-└── run-tests-docker.sh       # 在Docker环境中运行测试
-```
-
-### 文档和报告 📚
-
-项目文档和分析报告：
-
-#### 项目文档
-```
-docs/
-├── PRD.md                    # 产品需求文档
-├── CODE_QUALITY.md           # 代码质量规范
-├── DOCKER_SETUP.md           # Docker环境搭建指南
-├── PHASE1_COMPLETION_SUMMARY.md # 第一阶段完成总结
-└── TODOLIST.md               # 待办事项清单
-
-project_structure.md          # 项目结构详细说明
-README.md                     # 项目说明文档（本文件）
-```
-
-#### 代码质量报告
-```
-reports/
-├── bandit-report.json        # 安全扫描报告
-└── coverage/                 # 测试覆盖率报告
-```
-
-### 可删除的文件/目录 🗑️
-
-这些文件/目录可以安全删除而不影响核心功能：
-
-```
-.mypy_cache/              # MyPy缓存（自动生成）
-.venv/                    # 虚拟环境（可重新创建）
-reports/                  # 代码质量报告
-temp/                     # 临时文件
-test_output/              # 测试输出
-workspace/                # 工作空间文件
-uv.lock                   # UV包管理器锁文件（如果不用UV）
-.promptx/                 # PromptX配置（如果不用该工具）
-```
-
-### 环境和配置文件 ⚙️
-
-```
-.gitignore                # Git忽略规则（建议保留）
-.dockerignore             # Docker忽略规则
-```
-
-## 最小运行配置
-
-如果只想运行核心功能，最少需要保留：
-
-1. `app/` 目录及其所有内容
-2. `requirements.txt`
-3. `main.py`
-4. `pyproject.toml`（如果使用现代Python包管理）
-
-## 建议保留
-
-为了更好的开发体验，建议保留：
-
-- 所有核心必需文件
-- 测试相关文件（`tests/`）
-- 基本的开发工具配置（`.gitignore`, `.flake8`等）
-- 数据库迁移文件（`alembic/`）
-- 启动脚本（`scripts/start-dev.sh`等）
+**Made with ❤️ by the DeepPractice.ai Team**

@@ -1,0 +1,445 @@
+{
+  "document_type": "openapi_json",
+  "document_format": "json",
+  "metadata": {
+    "content_size": 9453,
+    "content_hash": "9a748ad45b9e8da9fbc95727b3c855d4",
+    "line_count": 363,
+    "word_count": 610,
+    "analysis_timestamp": "2025-08-15T15:41:37.013551",
+    "file_name": "sample_api.json",
+    "file_extension": ".json",
+    "file_stem": "sample_api",
+    "file_size": 9959,
+    "created_at": "2025-08-15T14:51:26.608392",
+    "modified_at": "2025-08-15T14:51:26.608392"
+  },
+  "title": "用户管理API",
+  "version": "1.0.0",
+  "description": "提供用户注册、登录、信息管理等功能的RESTful API",
+  "base_url": "https://api.example.com/v1",
+  "endpoints": [
+    {
+      "path": "/users",
+      "method": "GET",
+      "summary": "获取用户列表",
+      "description": "分页获取用户列表，支持按用户名和邮箱搜索",
+      "tags": [
+        "用户管理"
+      ],
+      "parameters": [
+        {
+          "name": "page",
+          "in": "query",
+          "description": "页码，从1开始",
+          "required": false,
+          "schema": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 1
+          }
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "description": "每页数量，最大100",
+          "required": false,
+          "schema": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "default": 20
+          }
+        },
+        {
+          "name": "search",
+          "in": "query",
+          "description": "搜索关键词，匹配用户名或邮箱",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "request_body": null,
+      "responses": {
+        "200": {
+          "description": "成功返回用户列表",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "integer",
+                    "example": 200
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "success"
+                  },
+                  "data": {
+                    "type": "object",
+                    "properties": {
+                      "users": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      },
+                      "pagination": {
+                        "$ref": "#/components/schemas/Pagination"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "code": 200,
+                "message": "success",
+                "data": {
+                  "users": [
+                    {
+                      "id": 1,
+                      "username": "john_doe",
+                      "email": "john@example.com",
+                      "created_at": "2024-01-15T10:30:00Z"
+                    }
+                  ],
+                  "pagination": {
+                    "page": 1,
+                    "limit": 20,
+                    "total": 1,
+                    "pages": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "请求参数错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Error"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "未授权访问",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Error"
+              }
+            }
+          }
+        }
+      },
+      "security": [],
+      "deprecated": false
+    },
+    {
+      "path": "/users",
+      "method": "POST",
+      "summary": "创建新用户",
+      "description": "注册新用户账号",
+      "tags": [
+        "用户管理"
+      ],
+      "parameters": [],
+      "request_body": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "username",
+                "email",
+                "password"
+              ],
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "minLength": 3,
+                  "maxLength": 50,
+                  "description": "用户名，3-50个字符"
+                },
+                "email": {
+                  "type": "string",
+                  "format": "email",
+                  "description": "邮箱地址"
+                },
+                "password": {
+                  "type": "string",
+                  "minLength": 8,
+                  "description": "密码，至少8个字符"
+                },
+                "full_name": {
+                  "type": "string",
+                  "description": "真实姓名（可选）"
+                }
+              }
+            },
+            "example": {
+              "username": "new_user",
+              "email": "newuser@example.com",
+              "password": "securepassword123",
+              "full_name": "张三"
+            }
+          }
+        }
+      },
+      "responses": {
+        "201": {
+          "description": "用户创建成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "integer",
+                    "example": 201
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "User created successfully"
+                  },
+                  "data": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "请求参数错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Error"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "用户名或邮箱已存在",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Error"
+              }
+            }
+          }
+        }
+      },
+      "security": [],
+      "deprecated": false
+    },
+    {
+      "path": "/users/{id}",
+      "method": "GET",
+      "summary": "获取用户详情",
+      "description": "根据用户ID获取用户详细信息",
+      "tags": [
+        "用户管理"
+      ],
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "用户ID",
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      ],
+      "request_body": null,
+      "responses": {
+        "200": {
+          "description": "成功返回用户信息",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "integer",
+                    "example": 200
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "success"
+                  },
+                  "data": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "用户不存在",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Error"
+              }
+            }
+          }
+        }
+      },
+      "security": [],
+      "deprecated": false
+    }
+  ],
+  "total_endpoints": 3,
+  "schemas": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "用户ID"
+        },
+        "username": {
+          "type": "string",
+          "description": "用户名"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "邮箱地址"
+        },
+        "full_name": {
+          "type": "string",
+          "description": "真实姓名"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "创建时间"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "更新时间"
+        }
+      }
+    },
+    "Pagination": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "type": "integer",
+          "description": "当前页码"
+        },
+        "limit": {
+          "type": "integer",
+          "description": "每页数量"
+        },
+        "total": {
+          "type": "integer",
+          "description": "总记录数"
+        },
+        "pages": {
+          "type": "integer",
+          "description": "总页数"
+        }
+      }
+    },
+    "Error": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "description": "错误代码"
+        },
+        "message": {
+          "type": "string",
+          "description": "错误信息"
+        },
+        "details": {
+          "type": "object",
+          "description": "错误详情"
+        }
+      }
+    }
+  },
+  "security_schemes": {
+    "bearerAuth": {
+      "type": "http",
+      "scheme": "bearer",
+      "bearerFormat": "JWT"
+    }
+  },
+  "quality_metrics": {
+    "overall_score": 85.0,
+    "completeness_score": 90.0,
+    "consistency_score": 80.0,
+    "clarity_score": 85.0,
+    "usability_score": 85.0
+  },
+  "issues": [
+    {
+      "type": "missing_field",
+      "severity": "medium",
+      "message": "缺少API描述",
+      "location": "info.description",
+      "suggestion": "添加详细的API功能描述"
+    },
+    {
+      "type": "incomplete_info",
+      "severity": "low",
+      "message": "GET /users端点缺少搜索关键词的默认值说明",
+      "location": "info.search.default_value",
+      "suggestion": "在参数定义中添加默认值说明，例如：search (string) [可选]: 搜索关键词，默认为null"
+    },
+    {
+      "type": "incomplete_info",
+      "severity": "low",
+      "message": "GET /users端点缺少搜索关键词的默认值说明",
+      "location": "info.search.default_value",
+      "suggestion": "在参数定义中添加默认值说明，例如：search (string) [可选]: 搜索关键词，默认为null"
+    },
+    {
+      "type": "incomplete_info",
+      "severity": "low",
+      "message": "GET /users端点缺少搜索关键词的默认值说明",
+      "location": "info.search.default_value",
+      "suggestion": "在参数定义中添加默认值说明，例如：search (string) [可选]: 搜索关键词，默认为null"
+    }
+  ],
+  "suggestions": [
+    "添加更多的请求和响应示例",
+    "完善错误码说明",
+    "提供SDK使用指南"
+  ],
+  "chunks": [
+    {
+      "chunk_id": "chunk_1",
+      "content": "# 用户管理API\n\n**版本**: 1.0.0\n\n**描述**: 提供用户注册、登录、信息管理等功能的RESTful API\n\n**基础URL**: https://api.example.com/v1\n\n## GET /users\n\n**摘要**: 获取用户列表\n\n**描述**: 分页获取用户列表，支持按用户名和邮箱搜索\n\n**标签**: 用户管理\n\n**参数**:\n\n- `page` (integer): 页码，从1开始\n\n- `limit` (integer): 每页数量，最大100\n\n- `search` (string): 搜索关键词，匹配用户名或邮箱\n\n**响应**:\n\n- `200`: 成功返回用户列表\n\n- `400`: 请求参数错误\n\n- `401`: 未授权访问\n\n## POST /users\n\n**摘要**: 创建新用户\n\n**描述**: 注册新用户账号\n\n**标签**: 用户管理\n\n**响应**:\n\n- `201`: 用户创建成功\n\n- `400`: 请求参数错误\n\n- `409`: 用户名或邮箱已存在\n\n## GET /users/{id}\n\n**摘要**: 获取用户详情\n\n**描述**: 根据用户ID获取用户详细信息\n\n**标签**: 用户管理\n\n**参数**:\n\n- `id` (integer) *必需*: 用户ID\n\n**响应**:\n\n- `200`: 成功返回用户信息\n\n- `404`: 用户不存在",
+      "chunk_type": "endpoint_group",
+      "token_count": 153,
+      "endpoints": [
+        "GET:/users",
+        "POST:/users",
+        "GET:/users/{id}"
+      ],
+      "metadata": {
+        "endpoint_count": 3,
+        "chunk_index": 0
+      }
+    }
+  ],
+  "analysis_timestamp": "2025-08-15 15:41:37.013802",
+  "analysis_duration": 31.48356795310974
+}

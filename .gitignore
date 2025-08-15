@@ -1,17 +1,19 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+# =============================================================================
+# Spec2Test Backend .gitignore
+# =============================================================================
 
+# =============================================================================
 # Python
+# =============================================================================
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+
+# C extensions
 *.so
+
+# Distribution / packaging
 .Python
 build/
 develop-eggs/
@@ -29,7 +31,7 @@ share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-PYTHONPATH
+MANIFEST
 
 # PyInstaller
 *.manifest
@@ -140,195 +142,153 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
+# =============================================================================
+# IDEs and Editors
+# =============================================================================
 # PyCharm
 .idea/
 
-# Node.js (if any)
-node_modules
-dist
-dist-ssr
-*.local
-package-lock.json
+# Visual Studio Code
+.vscode/
+*.code-workspace
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-.trae
-.vercel
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
 
-# Project specific
-spec2test.db
-spec2test.db-journal
-*.db
-*.db-journal
-*.sqlite
-*.sqlite3
-
-# Temporary files and directories
-temp/
-tmp/
-test_output/
-workspace/
-reports/
-*.tmp
-*.temp
-
-# Code quality and linting reports
-.flake8-report/
-.bandit-report/
-.mypy-report/
-.pylint-report/
-.coverage-report/
-flake8-report.txt
-bandit-report.json
-mypy-report.txt
-pylint-report.txt
-coverage-report.html
-
-# Pre-commit
-.pre-commit-cache/
-
-# Testing and validation outputs
-test-results/
-validation-results/
-*.test.log
-*.validation.log
-
-# Development scripts output
-scripts/logs/
-scripts/output/
-scripts/*.log
-
-# AI and ML models (if any large files)
-*.pkl
-*.pickle
-*.joblib
-*.h5
-*.hdf5
-*.onnx
-*.pb
-
-# UV package manager
-uv.lock
-
-# PromptX (if not needed in repo)
-.promptx/
-
-# Docker
-.dockerignore
-
-# Alembic (keep alembic/ but ignore some generated files)
-alembic/versions/*.pyc
-
-# FastAPI/Uvicorn
-.uvicorn.pid
-
-# Secrets and config
-.env.local
-.env.production
-.env.staging
-*.pem
-*.key
-*.crt
-*.p12
-*.pfx
-config.local.py
-secrets.py
-
-# OS generated files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-
-# Backup files
-*.bak
-*.backup
-*.orig
+# Vim
 *.swp
 *.swo
 *~
 
-# Lock files
-*.lock
-.lock
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
 
-# Runtime files
-*.pid
-*.sock
+# =============================================================================
+# Operating System
+# =============================================================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
 
-# Local development overrides
-local_config.py
-dev_config.py
-test_config.py
-.env.dev
-.env.test
-.env.override
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.tmp
+*.temp
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
 
-# Documentation build outputs
-docs/build/
-docs/_build/
-docs/site/
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
 
-# Alembic migration backups
-alembic/versions/*.backup
-alembic/versions/*.bak
+# =============================================================================
+# Application Specific
+# =============================================================================
+# Uploaded files
+uploads/
+temp/
+tmp/
 
-# Additional project-specific exclusions
-# Only keep functional code and Docker-related files
-*.md.backup
-*.md.tmp
-test_*.py.backup
-scripts/test_*.py
-scripts/*_test.py
-scripts/temp_*
-scripts/backup_*
+# Log files
+logs/
+*.log
 
-# Exclude development and testing artifacts
-dev_*
-temp_*
-backup_*
-old_*
-deprecated_*
-unused_*
+# Database files
+*.db
+*.sqlite
+*.sqlite3
 
-# Exclude non-essential documentation
-docs/temp/
-docs/backup/
-docs/old/
-docs/deprecated/
+# Configuration files with secrets
+.env
+.env.local
+.env.production
+config.local.py
+secrets.py
 
-# Exclude test artifacts and temporary outputs
-test_results/
-test_artifacts/
-*.test.json
-*.test.yaml
-*.test.xml
+# Backup files
+*.bak
+*.backup
+*.old
 
-# Exclude development databases and backups
-*.db.backup
-*.db.old
-*.sqlite.backup
-*.sqlite.old
+# Cache directories
+.cache/
+cache/
 
-# Exclude IDE and editor specific files
-.vscode/settings.json
-.vscode/launch.json
-.vscode/tasks.json
-*.code-workspace
+# Generated files
+generated/
+output/
 
-# Exclude development logs and debug files
-debug.log
-dev.log
-local.log
-*.debug
+# Test artifacts
+test-results/
+test-reports/
+.coverage.*
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# Kubernetes
+*.kubeconfig
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# =============================================================================
+# Project Specific
+# =============================================================================
+# Spec2Test specific ignores
+/reports/
+/test_results/
+/analysis_cache/
+/document_cache/
+
+# LLM model files (if stored locally)
+/models/
+*.bin
+*.safetensors
+
+# Generated test files
+/generated_tests/
+/temp_tests/
+
+# Performance profiling
+*.prof
+*.pstats
