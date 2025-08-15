@@ -207,6 +207,16 @@ class PerformanceConfig(BaseSettings):
     max_concurrent_tests: int = Field(default=10, gt=0, description="最大并发测试执行数")
     max_concurrent_analysis: int = Field(default=5, gt=0, description="最大并发分析任务数")
 
+    # 测试生成并发配置
+    max_concurrent_workers: int = Field(
+        default_factory=lambda: int(os.getenv("SPEC2TEST_MAX_CONCURRENT_WORKERS", "8")),
+        description="测试生成最大并发工作线程数"
+    )
+    concurrent_threshold: int = Field(
+        default_factory=lambda: int(os.getenv("SPEC2TEST_CONCURRENT_THRESHOLD", "3")),
+        description="启用并发的端点数量阈值"
+    )
+
 
 class Settings(BaseSettings):
     """主应用程序设置"""

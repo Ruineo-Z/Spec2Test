@@ -1,0 +1,489 @@
+{
+  "success": true,
+  "test_suite": {
+    "suite_id": "suite_1755246987",
+    "name": "用户管理API 测试套件",
+    "description": "基于文档分析结果自动生成的测试套件",
+    "test_cases": [
+      {
+        "case_id": "get__users_1",
+        "title": "获取用户列表，正常情况下的分页查询",
+        "description": "验证正确配置下GET /users接口返回正确的用户列表。",
+        "case_type": "positive",
+        "priority": "high",
+        "tags": [
+          "smoke",
+          "regression"
+        ],
+        "endpoint_path": "/users",
+        "http_method": "GET",
+        "request_headers": {},
+        "request_params": {
+          "page": 1,
+          "limit": 5
+        },
+        "request_body": {},
+        "expected_status_code": 200,
+        "expected_response": {
+          "code": 200,
+          "message": "success",
+          "data": [
+            {
+              "id": 1,
+              "username": "user1",
+              "email": "user1@example.com"
+            },
+            {
+              "id": 2,
+              "username": "user2",
+              "email": "user2@example.com"
+            }
+          ]
+        },
+        "test_steps": [],
+        "assertions": [
+          {
+            "assertion_type": "status_code",
+            "field_path": null,
+            "expected_value": 200,
+            "operator": "equals",
+            "description": "验证响应状态码为200"
+          },
+          {
+            "assertion_type": "response_body",
+            "field_path": "data.0.id",
+            "expected_value": "1",
+            "operator": "equals",
+            "description": "验证返回的第一个用户的ID是否正确"
+          }
+        ],
+        "created_at": "2025-08-15 16:36:56.978055",
+        "estimated_duration": 30.0
+      },
+      {
+        "case_id": "get__users_2",
+        "title": "获取用户列表，正常情况下的搜索查询",
+        "description": "验证正确配置下GET /users接口根据用户名和邮箱进行搜索。",
+        "case_type": "positive",
+        "priority": "high",
+        "tags": [
+          "smoke",
+          "regression"
+        ],
+        "endpoint_path": "/users",
+        "http_method": "GET",
+        "request_headers": {},
+        "request_params": {
+          "page": 1,
+          "limit": 5,
+          "search": "user"
+        },
+        "request_body": {},
+        "expected_status_code": 200,
+        "expected_response": {
+          "code": 200,
+          "message": "success",
+          "data": [
+            {
+              "id": 1,
+              "username": "user1",
+              "email": "user1@example.com"
+            },
+            {
+              "id": 2,
+              "username": "user2",
+              "email": "user2@example.com"
+            }
+          ]
+        },
+        "test_steps": [],
+        "assertions": [
+          {
+            "assertion_type": "status_code",
+            "field_path": null,
+            "expected_value": 200,
+            "operator": "equals",
+            "description": "验证响应状态码为200"
+          },
+          {
+            "assertion_type": "response_body",
+            "field_path": "data.0.username",
+            "expected_value": "user1",
+            "operator": "equals",
+            "description": "验证返回的第一个用户的用户名是否包含搜索关键词"
+          }
+        ],
+        "created_at": "2025-08-15 16:36:56.978109",
+        "estimated_duration": 30.0
+      },
+      {
+        "case_id": "get__users_3",
+        "title": "获取用户列表，正常情况下的分页和搜索组合查询",
+        "description": "验证正确配置下GET /users接口根据用户名和邮箱进行搜索，并且在指定的分页条件下返回正确的结果。",
+        "case_type": "positive",
+        "priority": "high",
+        "tags": [
+          "smoke",
+          "regression"
+        ],
+        "endpoint_path": "/users",
+        "http_method": "GET",
+        "request_headers": {},
+        "request_params": {
+          "page": 2,
+          "limit": 5,
+          "search": "user"
+        },
+        "request_body": {},
+        "expected_status_code": 200,
+        "expected_response": {
+          "code": 200,
+          "message": "success",
+          "data": [
+            {
+              "id": 3,
+              "username": "user3",
+              "email": "user3@example.com"
+            },
+            {
+              "id": 4,
+              "username": "user4",
+              "email": "user4@example.com"
+            }
+          ]
+        },
+        "test_steps": [],
+        "assertions": [
+          {
+            "assertion_type": "status_code",
+            "field_path": null,
+            "expected_value": 200,
+            "operator": "equals",
+            "description": "验证响应状态码为200"
+          },
+          {
+            "assertion_type": "response_body",
+            "field_path": "data.0.username",
+            "expected_value": "user3",
+            "operator": "equals",
+            "description": "验证返回的第一个用户的用户名是否包含搜索关键词"
+          }
+        ],
+        "created_at": "2025-08-15 16:36:56.978118",
+        "estimated_duration": 30.0
+      },
+      {
+        "case_id": "post__users_1",
+        "title": "创建新用户 - 正常流程",
+        "description": "验证POST /users端点正常工作，成功创建一个新用户。",
+        "case_type": "positive",
+        "priority": "high",
+        "tags": [
+          "smoke",
+          "regression"
+        ],
+        "endpoint_path": "/users",
+        "http_method": "POST",
+        "request_headers": {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer token"
+        },
+        "request_params": {},
+        "request_body": {
+          "username": "testuser123",
+          "email": "testuser@example.com",
+          "password": "Password123!"
+        },
+        "expected_status_code": 201,
+        "expected_response": {
+          "code": 200,
+          "message": "success",
+          "data": {}
+        },
+        "test_steps": [],
+        "assertions": [
+          {
+            "assertion_type": "status_code",
+            "field_path": null,
+            "expected_value": 201,
+            "operator": "equals",
+            "description": "验证响应状态码为201"
+          },
+          {
+            "assertion_type": "response_body",
+            "field_path": "message",
+            "expected_value": "success",
+            "operator": "equals",
+            "description": "验证返回的message字段为success"
+          }
+        ],
+        "created_at": "2025-08-15 16:37:28.340227",
+        "estimated_duration": 30.0
+      },
+      {
+        "case_id": "post__users_2",
+        "title": "创建新用户 - 用户名已存在",
+        "description": "尝试使用已经存在的用户名注册，期望返回409错误。",
+        "case_type": "negative",
+        "priority": "high",
+        "tags": [
+          "smoke",
+          "regression"
+        ],
+        "endpoint_path": "/users",
+        "http_method": "POST",
+        "request_headers": {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer token"
+        },
+        "request_params": {},
+        "request_body": {
+          "username": "testuser123",
+          "email": "testuser@example.com",
+          "password": "Password123!"
+        },
+        "expected_status_code": 409,
+        "expected_response": {
+          "code": 409,
+          "message": "Username or email already exists",
+          "data": {}
+        },
+        "test_steps": [],
+        "assertions": [
+          {
+            "assertion_type": "status_code",
+            "field_path": null,
+            "expected_value": 409,
+            "operator": "equals",
+            "description": "验证响应状态码为409"
+          },
+          {
+            "assertion_type": "response_body",
+            "field_path": "message",
+            "expected_value": "Username or email already exists",
+            "operator": "equals",
+            "description": "验证返回的message字段为Username or email already exists"
+          }
+        ],
+        "created_at": "2025-08-15 16:37:28.340294",
+        "estimated_duration": 30.0
+      },
+      {
+        "case_id": "post__users_3",
+        "title": "创建新用户 - 忽略必填项",
+        "description": "尝试使用缺少用户名和密码的请求体进行注册，期望返回400错误。",
+        "case_type": "negative",
+        "priority": "high",
+        "tags": [
+          "smoke",
+          "regression"
+        ],
+        "endpoint_path": "/users",
+        "http_method": "POST",
+        "request_headers": {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer token"
+        },
+        "request_params": {},
+        "request_body": {
+          "email": "testuser@example.com",
+          "password": "Password123!"
+        },
+        "expected_status_code": 400,
+        "expected_response": {
+          "code": 400,
+          "message": "Missing required fields: username, email",
+          "data": {}
+        },
+        "test_steps": [],
+        "assertions": [
+          {
+            "assertion_type": "status_code",
+            "field_path": null,
+            "expected_value": 400,
+            "operator": "equals",
+            "description": "验证响应状态码为400"
+          },
+          {
+            "assertion_type": "response_body",
+            "field_path": "message",
+            "expected_value": "Missing required fields: username, email",
+            "operator": "equals",
+            "description": "验证返回的message字段为Missing required fields: username, email"
+          }
+        ],
+        "created_at": "2025-08-15 16:37:28.340303",
+        "estimated_duration": 30.0
+      },
+      {
+        "case_id": "get__users_id_1",
+        "title": "获取用户详情 - 正常流程",
+        "description": "正常情况下，通过有效的用户ID获取用户的详细信息。",
+        "case_type": "positive",
+        "priority": "high",
+        "tags": [
+          "smoke",
+          "regression"
+        ],
+        "endpoint_path": "/users/{id}",
+        "http_method": "GET",
+        "request_headers": {},
+        "request_params": {
+          "id": 1
+        },
+        "request_body": {},
+        "expected_status_code": 200,
+        "expected_response": {
+          "code": 200,
+          "message": "success",
+          "data": {
+            "id": 1,
+            "name": "User One",
+            "email": "userone@example.com"
+          }
+        },
+        "test_steps": [],
+        "assertions": [
+          {
+            "assertion_type": "status_code",
+            "field_path": null,
+            "expected_value": 200,
+            "operator": "equals",
+            "description": "验证响应状态码为200"
+          },
+          {
+            "assertion_type": "response_body",
+            "field_path": "data.id",
+            "expected_value": "not_null",
+            "operator": "equals",
+            "description": "验证返回的ID不为空"
+          },
+          {
+            "assertion_type": "response_body",
+            "field_path": "data.name",
+            "expected_value": "User One",
+            "operator": "equals",
+            "description": "验证用户名称为User One"
+          },
+          {
+            "assertion_type": "response_body",
+            "field_path": "data.email",
+            "expected_value": "userone@example.com",
+            "operator": "equals",
+            "description": "验证用户邮箱为userone@example.com"
+          }
+        ],
+        "created_at": "2025-08-15 16:37:55.031718",
+        "estimated_duration": 30.0
+      },
+      {
+        "case_id": "get__users_id_2",
+        "title": "获取不存在的用户详情 - 404错误",
+        "description": "尝试通过无效或不存在的用户ID获取用户的详细信息，期望返回404状态码。",
+        "case_type": "negative",
+        "priority": "high",
+        "tags": [
+          "smoke",
+          "regression"
+        ],
+        "endpoint_path": "/users/{id}",
+        "http_method": "GET",
+        "request_headers": {},
+        "request_params": {
+          "id": 999
+        },
+        "request_body": {},
+        "expected_status_code": 404,
+        "expected_response": {
+          "code": 404,
+          "message": "User not found",
+          "data": {}
+        },
+        "test_steps": [],
+        "assertions": [
+          {
+            "assertion_type": "status_code",
+            "field_path": null,
+            "expected_value": 404,
+            "operator": "equals",
+            "description": "验证响应状态码为404"
+          }
+        ],
+        "created_at": "2025-08-15 16:37:55.031773",
+        "estimated_duration": 30.0
+      },
+      {
+        "case_id": "get__users_id_3",
+        "title": "无效用户ID - 400错误",
+        "description": "尝试通过一个无效的用户ID获取用户的详细信息，期望返回400状态码。",
+        "case_type": "negative",
+        "priority": "high",
+        "tags": [
+          "smoke",
+          "regression"
+        ],
+        "endpoint_path": "/users/{id}",
+        "http_method": "GET",
+        "request_headers": {},
+        "request_params": {
+          "id": "invalid_id"
+        },
+        "request_body": {},
+        "expected_status_code": 400,
+        "expected_response": {
+          "code": 400,
+          "message": "Invalid ID",
+          "data": {}
+        },
+        "test_steps": [],
+        "assertions": [
+          {
+            "assertion_type": "status_code",
+            "field_path": null,
+            "expected_value": 400,
+            "operator": "equals",
+            "description": "验证响应状态码为400"
+          }
+        ],
+        "created_at": "2025-08-15 16:37:55.031779",
+        "estimated_duration": 30.0
+      }
+    ],
+    "base_url": "https://api.example.com/v1",
+    "global_headers": null,
+    "setup_steps": [],
+    "teardown_steps": [],
+    "created_at": "2025-08-15 16:36:27.152505",
+    "total_cases": 9,
+    "estimated_duration": 270.0
+  },
+  "total_cases_generated": 9,
+  "cases_by_type": {
+    "positive": 5,
+    "negative": 4
+  },
+  "cases_by_priority": {
+    "high": 9
+  },
+  "generation_duration": 87.88053488731384,
+  "llm_calls_count": 3,
+  "errors": [],
+  "warnings": [],
+  "generated_at": "2025-08-15 16:36:27.152457",
+  "config_used": {
+    "strategy": "comprehensive",
+    "include_positive": true,
+    "include_negative": true,
+    "include_boundary": false,
+    "include_security": false,
+    "include_performance": false,
+    "max_cases_per_endpoint": 3,
+    "include_invalid_data": true,
+    "include_null_data": true,
+    "include_special_chars": true,
+    "llm_temperature": 0.3,
+    "llm_max_tokens": 4000,
+    "output_format": "json",
+    "include_documentation": true
+  }
+}

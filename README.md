@@ -66,6 +66,26 @@ Spec2Test is an intelligent API documentation testing tool that automatically an
 - Redis 7+
 - (Optional) Ollama for local LLM
 
+### ⚡ Performance Configuration (New in v0.5.0)
+Spec2Test supports concurrent test case generation for significantly improved performance:
+
+```bash
+# Set maximum concurrent workers (default: 8)
+export SPEC2TEST_MAX_CONCURRENT_WORKERS=8
+
+# Set concurrency threshold (default: 3 endpoints)
+export SPEC2TEST_CONCURRENT_THRESHOLD=3
+```
+
+**Expected Performance Improvements**:
+- 3 endpoints: 5-10% faster
+- 10 endpoints: 40%+ faster
+- 50 endpoints: 70%+ faster
+
+**Recommended Settings by LLM Provider**:
+- Local Ollama: `SPEC2TEST_MAX_CONCURRENT_WORKERS=3`
+- Cloud APIs (Gemini/OpenAI): `SPEC2TEST_MAX_CONCURRENT_WORKERS=10`
+
 ### Installation
 
 1. **Clone the repository**

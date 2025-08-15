@@ -51,7 +51,8 @@ class LLMFactory:
             elif provider == LLMProvider.OPENAI.value:
                 return OpenAILangChainClient(config)
             elif provider == LLMProvider.GEMINI.value:
-                raise LLMError("Gemini暂不支持LangChain集成，请使用Ollama或OpenAI")
+                from .gemini_client import GeminiLangChainClient
+                return GeminiLangChainClient(config)
             else:
                 raise LLMError(f"不支持的LLM提供商: {provider}")
                 

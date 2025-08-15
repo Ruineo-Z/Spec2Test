@@ -176,13 +176,15 @@
 - [x] **4.1.5** `app/core/document_analyzer/analyzer.py` - 主分析器 ✅ **已完成**
 - [x] **4.1.6** 功能验证测试：8/8测试通过 ✅ **已完成**
 
-### 4.2 测试生成模块 (1天)
-- [ ] **4.2.1** `app/core/test_generator/models.py` - 数据模型
-- [ ] **4.2.2** `app/core/test_generator/prompt_builder.py` - 提示词构建
-- [ ] **4.2.3** `app/core/test_generator/case_generator.py` - 用例生成器
-  - [ ] 正常流程用例
-  - [ ] 边界条件用例
-  - [ ] 异常情况用例
+### 4.2 测试生成模块 (1天) ✅ **已完成**
+- [x] **4.2.1** `app/core/test_generator/models.py` - 数据模型 ✅ **已完成**
+- [x] **4.2.2** `app/core/test_generator/prompt_builder.py` - 提示词构建 ✅ **已完成**
+- [x] **4.2.3** `app/core/test_generator/case_generator.py` - 用例生成器 ✅ **已完成**
+  - [x] 正常流程用例 ✅ **已完成**
+  - [x] 边界条件用例 ✅ **已完成**
+  - [x] 异常情况用例 ✅ **已完成**
+- [x] **4.2.4** 集成测试：5/5测试通过 ✅ **已完成**
+- [x] **4.2.5** 实际验证：成功生成9个测试用例 ✅ **已完成**
 
 ### 4.3 测试执行模块 (1天)
 - [ ] **4.3.1** `app/core/test_executor/models.py` - 数据模型
