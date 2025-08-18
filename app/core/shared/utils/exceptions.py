@@ -102,6 +102,68 @@ class BaseSpec2TestException(Exception):
         return f"[{self.error_code.value}] {self.message}"
 
 
+class BusinessException(BaseSpec2TestException):
+    """业务异常类
+
+    用于业务逻辑相关的异常，如业务规则违反、状态不正确等。
+    """
+
+    def __init__(
+        self,
+        message: str,
+        business_code: Optional[str] = None,
+        **kwargs
+    ):
+        """初始化业务异常
+
+        Args:
+            message: 错误消息
+            business_code: 业务错误代码
+            **kwargs: 其他参数
+        """
+        details = kwargs.get("details", {})
+        if business_code:
+            details["business_code"] = business_code
+
+        super().__init__(
+            message,
+            error_code=kwargs.get("error_code", ErrorCode.INVALID_OPERATION),
+            details=details,
+            cause=kwargs.get("cause")
+        )
+
+
+class SystemException(BaseSpec2TestException):
+    """系统异常类
+
+    用于系统级别的异常，如数据库连接失败、文件系统错误等。
+    """
+
+    def __init__(
+        self,
+        message: str,
+        system_component: Optional[str] = None,
+        **kwargs
+    ):
+        """初始化系统异常
+
+        Args:
+            message: 错误消息
+            system_component: 系统组件名称
+            **kwargs: 其他参数
+        """
+        details = kwargs.get("details", {})
+        if system_component:
+            details["system_component"] = system_component
+
+        super().__init__(
+            message,
+            error_code=kwargs.get("error_code", ErrorCode.UNKNOWN_ERROR),
+            details=details,
+            cause=kwargs.get("cause")
+        )
+
+
 class ValidationException(BaseSpec2TestException):
     """验证异常类
 

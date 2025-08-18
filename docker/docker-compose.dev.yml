@@ -1,0 +1,187 @@
+version: '3.8'
+
+services:
+  # 开发环境主应用服务
+  app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.dev
+    container_name: spec2test-app-dev
+    ports:
+      - "8000:8000"
+      - "5678:5678"  # debugpy端口
+    environment:
+      - DATABASE_URL=postgresql://spec2test:spec2test123@postgres:5432/spec2test_dev
+      - REDIS_URL=redis://redis:6379/1
+      - ENVIRONMENT=development
+      - LOG_LEVEL=DEBUG
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://ollama:11434}
+      - DEFAULT_LLM_PROVIDER=${DEFAULT_LLM_PROVIDER:-ollama}
+      - PYTHONPATH=/app
+      - RELOAD=true
+    volumes:
+      - ..:/app:cached  # 挂载源代码，支持热重载
+      - app_data_dev:/app/data
+      - app_logs_dev:/app/logs
+      - app_uploads_dev:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - spec2test-dev-network
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+  # 开发环境PostgreSQL数据库
+  postgres:
+    image: postgres:15-alpine
+    container_name: spec2test-postgres-dev
+    environment:
+      - POSTGRES_DB=spec2test_dev
+      - POSTGRES_USER=spec2test
+      - POSTGRES_PASSWORD=spec2test123
+      - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=C --lc-ctype=C
+    volumes:
+      - postgres_data_dev:/var/lib/postgresql/data
+      - ../scripts/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql:ro
+    ports:
+      - "5433:5432"  # 避免与本地PostgreSQL冲突
+    restart: unless-stopped
+    networks:
+      - spec2test-dev-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U spec2test -d spec2test_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # 开发环境Redis
+  redis:
+    image: redis:7-alpine
+    container_name: spec2test-redis-dev
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data_dev:/data
+    ports:
+      - "6380:6379"  # 避免与本地Redis冲突
+    restart: unless-stopped
+    networks:
+      - spec2test-dev-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # 开发环境任务工作器
+  worker:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.dev
+    container_name: spec2test-worker-dev
+    command: ["python", "-m", "app.core.tasks.worker", "--log-level", "DEBUG"]
+    environment:
+      - DATABASE_URL=postgresql://spec2test:spec2test123@postgres:5432/spec2test_dev
+      - REDIS_URL=redis://redis:6379/1
+      - ENVIRONMENT=development
+      - LOG_LEVEL=DEBUG
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://ollama:11434}
+      - DEFAULT_LLM_PROVIDER=${DEFAULT_LLM_PROVIDER:-ollama}
+      - PYTHONPATH=/app
+    volumes:
+      - ..:/app:cached
+      - app_data_dev:/app/data
+      - app_logs_dev:/app/logs
+      - app_uploads_dev:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - spec2test-dev-network
+
+  # 数据库管理工具 (pgAdmin)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: spec2test-pgadmin-dev
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@spec2test.com
+      - PGADMIN_DEFAULT_PASSWORD=admin123
+      - PGADMIN_CONFIG_SERVER_MODE=False
+    volumes:
+      - pgadmin_data_dev:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    networks:
+      - spec2test-dev-network
+
+  # Redis管理工具 (RedisInsight)
+  redis-insight:
+    image: redislabs/redisinsight:latest
+    container_name: spec2test-redis-insight-dev
+    ports:
+      - "8001:8001"
+    volumes:
+      - redis_insight_data_dev:/db
+    depends_on:
+      - redis
+    restart: unless-stopped
+    networks:
+      - spec2test-dev-network
+
+  # 邮件服务器 (用于测试邮件功能)
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: spec2test-mailhog-dev
+    ports:
+      - "1025:1025"  # SMTP端口
+      - "8025:8025"  # Web界面端口
+    restart: unless-stopped
+    networks:
+      - spec2test-dev-network
+
+  # 文档服务器 (用于查看API文档)
+  docs:
+    image: nginx:alpine
+    container_name: spec2test-docs-dev
+    ports:
+      - "8080:80"
+    volumes:
+      - ../docs:/usr/share/nginx/html:ro
+    restart: unless-stopped
+    networks:
+      - spec2test-dev-network
+
+# 开发环境网络配置
+networks:
+  spec2test-dev-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16
+
+# 开发环境数据卷配置
+volumes:
+  postgres_data_dev:
+    driver: local
+  redis_data_dev:
+    driver: local
+  app_data_dev:
+    driver: local
+  app_logs_dev:
+    driver: local
+  app_uploads_dev:
+    driver: local
+  pgadmin_data_dev:
+    driver: local
+  redis_insight_data_dev:
+    driver: local

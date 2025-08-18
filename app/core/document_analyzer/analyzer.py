@@ -7,6 +7,7 @@
 import time
 from typing import Dict, Any, Optional, Union
 from pathlib import Path
+from dataclasses import dataclass
 
 from .models import DocumentAnalysisResult, ChunkingStrategy
 from .parser import DocumentParser
@@ -17,26 +18,54 @@ from app.core.shared.utils.logger import get_logger
 logger = get_logger(__name__)
 
 
+@dataclass
+class AnalysisConfig:
+    """文档分析配置"""
+    enable_validation: bool = True
+    enable_chunking: bool = False
+    enable_quality_check: bool = True
+    enable_security_check: bool = False
+    max_tokens: int = 4000
+    overlap_tokens: int = 200
+    chunk_by_endpoint: bool = True
+
+    def to_dict(self) -> Dict[str, Any]:
+        """转换为字典"""
+        return {
+            "enable_validation": self.enable_validation,
+            "enable_chunking": self.enable_chunking,
+            "enable_quality_check": self.enable_quality_check,
+            "enable_security_check": self.enable_security_check,
+            "max_tokens": self.max_tokens,
+            "overlap_tokens": self.overlap_tokens,
+            "chunk_by_endpoint": self.chunk_by_endpoint
+        }
+
+
 class DocumentAnalyzer:
     """文档分析器主类
     
     提供完整的API文档分析功能，包括解析、质量检查、分块等。
     """
     
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+    def __init__(self, config: Optional[Union[AnalysisConfig, Dict[str, Any]]] = None):
         """初始化文档分析器
-        
+
         Args:
             config: 分析器配置
         """
-        self.config = config or {}
+        if isinstance(config, AnalysisConfig):
+            self.config = config.to_dict()
+        else:
+            self.config = config or {}
+
         self.logger = get_logger(f"{self.__class__.__name__}")
-        
+
         # 初始化子组件
         self.parser = DocumentParser()
         self.validator = DocumentValidator()
         self.chunker = DocumentChunker()
-        
+
         # 配置参数
         self.enable_validation = self.config.get("enable_validation", True)
         self.enable_chunking = self.config.get("enable_chunking", False)

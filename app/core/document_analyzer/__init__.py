@@ -12,7 +12,7 @@ from .models import (
 from .parser import DocumentParser
 from .validator import DocumentValidator
 from .chunker import DocumentChunker
-from .analyzer import DocumentAnalyzer
+from .analyzer import DocumentAnalyzer, AnalysisConfig
 
 __all__ = [
     # 数据模型
@@ -34,5 +34,6 @@ __all__ = [
     "DocumentParser",
     "DocumentValidator",
     "DocumentChunker",
-    "DocumentAnalyzer"
+    "DocumentAnalyzer",
+    "AnalysisConfig"
 ]
